@@ -1,13 +1,13 @@
 package com.example.movierama.user;
 
 import jakarta.persistence.*;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Entity(name = "m_user")
 @Table
-@Getter
-@Setter
+@NoArgsConstructor
+@Data
 public class User {
     @Id
     @SequenceGenerator(name = "m_user_sequence", sequenceName = "m_user_sequence", allocationSize = 1)
@@ -15,9 +15,6 @@ public class User {
     private Long id;
     private String name;
     private String password;
-
-    public User() {
-    }
 
     public User(String name) {
         this.name = name;

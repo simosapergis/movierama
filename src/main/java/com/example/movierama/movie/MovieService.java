@@ -5,6 +5,7 @@ import com.example.movierama.user.User;
 import org.modelmapper.ModelMapper;
 import org.modelmapper.convention.MatchingStrategies;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
@@ -13,6 +14,8 @@ import java.util.stream.Collectors;
 
 @Service
 public class MovieService {
+
+    private final ModelMapper modelMapper = new ModelMapper();
     private final MovieRepository movieRepository;
 
     @Autowired
@@ -20,9 +23,13 @@ public class MovieService {
         this.movieRepository = movieRepository;
     }
 
+    @Lazy
+    void configMapper() {
+        modelMapper.getConfiguration().setMatchingStrategy(MatchingStrategies.LOOSE);
+    }
+
     public List<MovieDTO> getMovies(User user, String sortBy) {
         final Sort sort = Sort.by(sortBy).descending();
-        final ModelMapper modelMapper = new ModelMapper();
         modelMapper.getConfiguration().setMatchingStrategy(MatchingStrategies.LOOSE);
 
         List<Movie> movies;
@@ -35,6 +42,11 @@ public class MovieService {
         return movies.stream()
                 .map(elem -> modelMapper.map(elem, MovieDTO.class))
                 .collect(Collectors.toList());
+    }
+
+    public void postMovie(MovieDTO movieDTO) {
+        Movie movie = movieRepository.save(modelMapper.map(movieDTO, Movie.class));
+        System.out.println("posted movie is " + movie);
     }
 
 }

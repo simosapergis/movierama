@@ -2,17 +2,15 @@ package com.example.movierama.movie;
 
 import com.example.movierama.user.User;
 import jakarta.persistence.*;
-import lombok.Getter;
+import lombok.Data;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
 import org.hibernate.annotations.Formula;
 
 import java.time.LocalDate;
 
 @Table
 @Entity
-@Getter
-@Setter
+@Data
 @NoArgsConstructor
 public class Movie {
     @Id

@@ -31,4 +31,11 @@ public class MovieController {
 
         return new ResponseEntity<>(moviesList, HttpStatus.OK);
     }
+
+    @PostMapping
+    public ResponseEntity<MovieDTO> postMovie(@RequestBody MovieDTO movieDTO){
+        movieService.postMovie(movieDTO);
+
+        return new ResponseEntity<>(movieDTO, HttpStatus.OK);
+    }
 }

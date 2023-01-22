@@ -11,6 +11,8 @@ import java.time.LocalDate;
 @Setter
 @ToString
 public class MovieDTO {
+    @JsonProperty("id")
+    Long id;
     @JsonProperty("title")
     String title;
     @JsonProperty("description")
