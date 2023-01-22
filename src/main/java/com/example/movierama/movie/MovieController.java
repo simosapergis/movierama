@@ -1,5 +1,6 @@
 package com.example.movierama.movie;
 
+import com.example.movierama.constants.AppConstants;
 import com.example.movierama.user.User;
 import jakarta.websocket.server.PathParam;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,13 +23,14 @@ public class MovieController {
     }
 
     @GetMapping
-    public List<Movie> getMovies() {
-        return movieService.getMovies();
-    }
+    public List<Movie> getMovies(
+            @RequestParam(value="postedBy", required = false) User user,
+            @RequestParam(value = "sortBy", defaultValue = AppConstants.DEFAULT_SORT_BY, required = false) String sortBy) {
 
-    @RequestMapping("/poster/{id}")
-    public List<Movie> getMoviesByPoster(@PathParam("id") User user) {
-        return movieService.getMoviesByPosterId(user);
+        if (user == null)
+            return movieService.getMovies(sortBy);
+        else
+            return movieService.getMoviesByPosterId(user);
     }
 
 }

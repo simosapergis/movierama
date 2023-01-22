@@ -2,6 +2,7 @@ package com.example.movierama.movie;
 
 import com.example.movierama.user.User;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -15,8 +16,9 @@ public class MovieService {
         this.movieRepository = movieRepository;
     }
 
-    public List<Movie> getMovies(){
-        return movieRepository.findAll();
+    public List<Movie> getMovies(String sortBy){
+        Sort sort = Sort.by(sortBy).descending();
+        return movieRepository.findAll(sort);
     }
 
     public List<Movie> getMoviesByPosterId(User user) {
