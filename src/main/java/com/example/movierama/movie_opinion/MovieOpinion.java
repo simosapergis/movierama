@@ -1,4 +1,4 @@
-package com.example.movierama.MovieOpinion;
+package com.example.movierama.movie_opinion;
 
 import com.example.movierama.movie.Movie;
 import com.example.movierama.user.User;
@@ -18,7 +18,7 @@ public class MovieOpinion {
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "movie_opinion_sequence")
     private Long id;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     private Movie movie;
 
     @OneToOne

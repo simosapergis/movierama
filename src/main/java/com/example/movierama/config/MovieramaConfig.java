@@ -1,7 +1,7 @@
 package com.example.movierama.config;
 
-import com.example.movierama.MovieOpinion.MovieOpinion;
-import com.example.movierama.MovieOpinion.MovieOpinionRepository;
+import com.example.movierama.movie_opinion.MovieOpinion;
+import com.example.movierama.movie_opinion.MovieOpinionRepository;
 import com.example.movierama.movie.Movie;
 import com.example.movierama.movie.MovieRepository;
 import com.example.movierama.user.User;
