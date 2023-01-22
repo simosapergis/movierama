@@ -16,12 +16,14 @@ public class MovieService {
         this.movieRepository = movieRepository;
     }
 
-    public List<Movie> getMovies(String sortBy){
+    public List<Movie> getMovies(User user, String sortBy){
         Sort sort = Sort.by(sortBy).descending();
-        return movieRepository.findAll(sort);
+
+        if (user == null)
+            return movieRepository.findAll(sort);
+        else
+            return movieRepository.findAllByUserOrderByPublicationDateDesc(user);
+
     }
 
-    public List<Movie> getMoviesByPosterId(User user) {
-        return movieRepository.findAllByUserOrderByPublicationDateDesc(user);
-    }
 }
