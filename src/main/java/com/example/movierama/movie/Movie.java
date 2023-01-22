@@ -1,14 +1,13 @@
 package com.example.movierama.movie;
 
-import com.example.movierama.MovieOpinion.MovieOpinion;
 import com.example.movierama.user.User;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.hibernate.annotations.Formula;
 
 import java.time.LocalDate;
-import java.util.List;
 
 @Table
 @Entity
@@ -32,8 +31,12 @@ public class Movie {
 
     private LocalDate publicationDate;
 
-//    @ManyToMany
-//    private List<MovieOpinion> opinions;
+    @Formula("(SELECT COUNT(1) FROM movie_opinion mo WHERE mo.movie_id = id AND mo.liked = true)")
+    private int likes;
+
+    @Formula("(SELECT COUNT(1) FROM movie_opinion mo WHERE mo.movie_id = id AND mo.hated = true)")
+    private int hates;
+
 
     public Movie(String title, LocalDate publicationDate, User user, String description) {
         this.title = title;

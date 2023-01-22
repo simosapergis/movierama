@@ -1,5 +1,7 @@
 package com.example.movierama.config;
 
+import com.example.movierama.MovieOpinion.MovieOpinion;
+import com.example.movierama.MovieOpinion.MovieOpinionRepository;
 import com.example.movierama.movie.Movie;
 import com.example.movierama.movie.MovieRepository;
 import com.example.movierama.user.User;
@@ -15,7 +17,7 @@ import java.util.List;
 public class MovieramaConfig {
 
     @Bean
-    CommandLineRunner commandLineRunner(MovieRepository movieRepository, UserRepository userRepository) {
+    CommandLineRunner commandLineRunner(MovieRepository movieRepository, UserRepository userRepository, MovieOpinionRepository movieOpinionRepository) {
         return args -> {
             final User user1 = new User("user1");
             final User user2 = new User("user2");
@@ -42,6 +44,16 @@ public class MovieramaConfig {
             final Movie movie10 = new Movie("Charisma", LocalDate.now().minusDays(0), user9,"Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum");
 
             movieRepository.saveAll(List.of(movie1, movie2, movie3, movie4, movie5, movie6, movie7, movie8, movie9, movie10));
+
+            final MovieOpinion movieOpinion1 = new MovieOpinion(movie2, user1,true, false);
+            final MovieOpinion movieOpinion2 = new MovieOpinion(movie1, user4,true, false);
+            final MovieOpinion movieOpinion3 = new MovieOpinion(movie2, user1,false, true);
+            final MovieOpinion movieOpinion4 = new MovieOpinion(movie4, user3, true, false);
+            final MovieOpinion movieOpinion5 = new MovieOpinion(movie2, user1,false, true);
+            final MovieOpinion movieOpinion6 = new MovieOpinion(movie2, user2, false, true);
+            final MovieOpinion movieOpinion7 = new MovieOpinion(movie2, user3, true, false);
+
+            movieOpinionRepository.saveAll(List.of(movieOpinion1, movieOpinion2,  movieOpinion3, movieOpinion4, movieOpinion5,movieOpinion6, movieOpinion7));
         };
     }
 }
