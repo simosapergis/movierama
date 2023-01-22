@@ -13,8 +13,15 @@ public class User {
     @SequenceGenerator(name = "m_user_sequence", sequenceName = "m_user_sequence", allocationSize = 1)
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "m_user_sequence")
     private Long id;
-    private String name;
+    @Column(nullable = false, unique = true, length = 45)
+    private String email;
+    @Column(nullable = false, length = 64)
     private String password;
+    @Column(nullable = false, length = 20)
+    private String name;
+    @Column(nullable = false, length = 20)
+    private String lastName;
+
 
     public User(String name) {
         this.name = name;
