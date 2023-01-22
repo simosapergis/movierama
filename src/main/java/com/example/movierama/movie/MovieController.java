@@ -1,7 +1,6 @@
 package com.example.movierama.movie;
 
 import com.example.movierama.constants.AppConstants;
-import com.example.movierama.dto.MovieDTO;
 import com.example.movierama.user.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -9,7 +8,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Optional;
 
 @RestController
 @RequestMapping(path = "api/v1/movies")
@@ -33,9 +31,9 @@ public class MovieController {
     }
 
     @PostMapping
-    public ResponseEntity<MovieDTO> postMovie(@RequestBody MovieDTO movieDTO){
-        movieService.postMovie(movieDTO);
+    public ResponseEntity<MovieDTO> addMovie(@RequestBody MovieDTO movieDTO){
+        final MovieDTO postedMovieDTO = movieService.addMovie(movieDTO);
 
-        return new ResponseEntity<>(movieDTO, HttpStatus.OK);
+        return new ResponseEntity<>(postedMovieDTO, HttpStatus.CREATED);
     }
 }

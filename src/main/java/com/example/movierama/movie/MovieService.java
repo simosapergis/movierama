@@ -1,14 +1,14 @@
 package com.example.movierama.movie;
 
-import com.example.movierama.dto.MovieDTO;
 import com.example.movierama.user.User;
+import jakarta.annotation.PostConstruct;
 import org.modelmapper.ModelMapper;
 import org.modelmapper.convention.MatchingStrategies;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Lazy;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -23,14 +23,13 @@ public class MovieService {
         this.movieRepository = movieRepository;
     }
 
-    @Lazy
+    @PostConstruct
     void configMapper() {
         modelMapper.getConfiguration().setMatchingStrategy(MatchingStrategies.LOOSE);
     }
 
     public List<MovieDTO> getMovies(User user, String sortBy) {
         final Sort sort = Sort.by(sortBy).descending();
-        modelMapper.getConfiguration().setMatchingStrategy(MatchingStrategies.LOOSE);
 
         List<Movie> movies;
 
@@ -44,9 +43,12 @@ public class MovieService {
                 .collect(Collectors.toList());
     }
 
-    public void postMovie(MovieDTO movieDTO) {
-        Movie movie = movieRepository.save(modelMapper.map(movieDTO, Movie.class));
-        System.out.println("posted movie is " + movie);
+    public MovieDTO addMovie(MovieDTO movieDTO) {
+        final Movie movie = modelMapper.map(movieDTO, Movie.class);
+        movie.setPublicationDate(LocalDate.now());
+        movieRepository.save(movie);
+
+        return modelMapper.map(movie, MovieDTO.class);
     }
 
 }

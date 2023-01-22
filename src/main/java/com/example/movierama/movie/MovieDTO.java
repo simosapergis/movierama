@@ -1,4 +1,4 @@
-package com.example.movierama.dto;
+package com.example.movierama.movie;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.*;
@@ -11,7 +11,7 @@ import java.time.LocalDate;
 @Setter
 @ToString
 public class MovieDTO {
-    @JsonProperty("id")
+    @JsonProperty("movieId")
     Long id;
     @JsonProperty("title")
     String title;
@@ -19,6 +19,8 @@ public class MovieDTO {
     String description;
     @JsonProperty("postedBy")
     String name;
+    @JsonProperty("posterId")
+    Long userId;
     @JsonProperty("postedOn")
     LocalDate publicationDate;
     @JsonProperty("likes")
