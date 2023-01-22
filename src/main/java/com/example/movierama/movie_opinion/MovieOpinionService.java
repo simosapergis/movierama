@@ -44,4 +44,25 @@ public class MovieOpinionService {
             return movieOpinionRepository.save(newMovieOpinion);
         }
     }
+
+    public MovieOpinion submitHate(User user, Movie movie) {
+        final Optional<MovieOpinion> optionalOpinion = movieOpinionRepository.findByUserAndMovie(user, movie);
+
+        if (optionalOpinion.isPresent()) {
+            log.info("Opinion exists for user " + user.getName() + " and movie " + movie.getTitle());
+
+            final MovieOpinion movieOpinion = optionalOpinion.get();
+            //Toggle in case the movie is already liked by the user
+            movieOpinion.setHated(!movieOpinion.getHated());
+            movieOpinion.setLiked(false);
+
+            return movieOpinionRepository.save(movieOpinion);
+        } else {
+            log.info("Opinion does not exist for user " + user.getName() + " and movie " + movie.getTitle());
+
+            MovieOpinion newMovieOpinion = new MovieOpinion(movie, user, false, true);
+
+            return movieOpinionRepository.save(newMovieOpinion);
+        }
+    }
 }

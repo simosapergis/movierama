@@ -31,4 +31,9 @@ public class MovieOpinionController {
     MovieOpinion likeMovie(@PathVariable("movieId") Movie movie, @PathVariable("userId") User user) {
         return movieOpinionService.submitLike(user, movie);
     }
+
+    @RequestMapping(path = "/{movieId}/user/{userId}/hate", method = RequestMethod.POST, produces = "application/json")
+    MovieOpinion hateMovie(@PathVariable("movieId") Movie movie, @PathVariable("userId") User user) {
+        return movieOpinionService.submitHate(user, movie);
+    }
 }
