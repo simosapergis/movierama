@@ -6,7 +6,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.Formula;
 
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 @Table
 @Entity
@@ -28,7 +28,7 @@ public class Movie {
     @Column(length = 1500, nullable = false)
     private String description;
 
-    private LocalDate publicationDate;
+    private LocalDateTime publicationDate;
 
     @Formula("(SELECT COUNT(1) FROM movie_opinion mo WHERE mo.movie_id = id AND mo.liked = true)")
     private int likes;
@@ -37,7 +37,7 @@ public class Movie {
     private int hates;
 
 
-    public Movie(String title, LocalDate publicationDate, User user, String description) {
+    public Movie(String title, LocalDateTime publicationDate, User user, String description) {
         this.title = title;
         this.publicationDate = publicationDate;
         this.user = user;

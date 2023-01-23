@@ -8,7 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -45,7 +45,7 @@ public class MovieService {
 
     public MovieDTO addMovie(MovieDTO movieDTO) {
         final Movie movie = modelMapper.map(movieDTO, Movie.class);
-        movie.setPublicationDate(LocalDate.now());
+        movie.setPublicationDate(LocalDateTime.now());
         movieRepository.save(movie);
 
         return modelMapper.map(movie, MovieDTO.class);

@@ -3,9 +3,9 @@ package com.example.movierama.movie;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.*;
 
-import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.temporal.ChronoUnit;
 
-import static java.time.temporal.ChronoUnit.DAYS;
 
 @NoArgsConstructor
 @AllArgsConstructor
@@ -26,7 +26,7 @@ public class MovieDTO {
     @JsonProperty("posterId")
     Long userId;
     @JsonProperty("postedOn")
-    LocalDate publicationDate;
+    LocalDateTime publicationDate;
     @JsonProperty("postedWhen")
     String postedWhen;
     @JsonProperty("likes")
@@ -40,16 +40,24 @@ public class MovieDTO {
     @JsonProperty("owned")
     boolean owned;
 
-    public void setPublicationDate(LocalDate publicationDate) {
+    public void setPublicationDate(LocalDateTime publicationDate) {
         this.publicationDate = publicationDate;
         setPostedWhen();
     }
 
     public void setPostedWhen() {
-        final long postedDaysAgo = DAYS.between(this.publicationDate, LocalDate.now());
+        final long postedDaysAgo = ChronoUnit.DAYS.between(this.publicationDate, LocalDateTime.now());
+        long minutesAgo = 0;
+        long hoursAgo = 0;
+
+        if (postedDaysAgo == 0)
+            hoursAgo = ChronoUnit.HOURS.between(this.publicationDate, LocalDateTime.now());
+
+        if (hoursAgo < 1)
+            minutesAgo = ChronoUnit.MINUTES.between(this.publicationDate, LocalDateTime.now());
 
         switch ((int) postedDaysAgo) {
-            case 0 -> this.postedWhen = "Today";
+            case 0 -> this.postedWhen = (minutesAgo >= 0) ? minutesAgo + " minutes ago" : hoursAgo + " hours ago";
             case 1 -> this.postedWhen = "1 day ago";
             default -> this.postedWhen = postedDaysAgo + " days ago";
         }
