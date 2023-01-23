@@ -12,6 +12,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.List;
 
@@ -29,9 +30,11 @@ public class MovieramaController {
     }
 
     @GetMapping("/")
-    public String viewHomePage(Model model) {
+    public String viewHomePage(Model model,
+                               @RequestParam(value = "postedBy", required = false) User postedBy,
+                               @RequestParam(value = "sortBy", defaultValue = AppConstants.DEFAULT_SORT_BY, required = false) String sortBy) {
         CustomUserDetails.isUserAuthenticated();
-        List<MovieDTO> movies = movieService.getMovies(null, AppConstants.DEFAULT_SORT_BY);
+        List<MovieDTO> movies = movieService.getMovies(postedBy, sortBy);
         model.addAttribute("movies", movies);
         return "index";
     }

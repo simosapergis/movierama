@@ -26,7 +26,7 @@
     <div style="display: flex;">
         <div class="sort-area" style="width: 85%; background-color: aliceblue; border: 3px solid black; padding: 15px; margin-bottom: 15px;">
             <div class="flex-container">
-                <span>Sort by:</span> <a href="#">Likes</a> | <a href="#">Hates</a> | <a href="#">Date</a>
+                <span>Sort by:</span> <a th:href="@{'/?sortBy=likes'}">Likes</a> | <a th:href="@{'/?sortBy=hates'}">Hates</a> | <a th:href="@{'/?sortBy=publicationDate'}">Date</a>
             </div>
         </div>
         <div>
