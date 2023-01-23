@@ -19,16 +19,16 @@ public class MovieramaConfig {
     @Bean
     CommandLineRunner commandLineRunner(MovieRepository movieRepository, UserRepository userRepository, MovieOpinionRepository movieOpinionRepository) {
         return args -> {
-            final User user1 = new User("user1");
-            final User user2 = new User("user2");
-            final User user3 = new User("user3");
-            final User user4 = new User("user4");
-            final User user5 = new User("user5");
-            final User user6 = new User("user6");
-            final User user7 = new User("user7");
-            final User user8 = new User("user8");
-            final User user9 = new User("user9");
-            final User user10 = new User("user10");
+            final User user1 = new User("user1@test.com", "user1234", "Frank", "Miller");
+            final User user2 = new User("user2@test.com", "user1234", "Jason", "Momoa");
+            final User user3 = new User("user3@test.com", "user1234", "Mark", "Stores");
+            final User user4 = new User("user4@test.com", "user1234", "Bob", "Michael");
+            final User user5 = new User("user5@test.com", "user1234", "Simos", "Apergis");
+            final User user6 = new User("user6@test.com", "user1234", "Jim", "MIller");
+            final User user7 = new User("user7@test.com", "user1234", "Nick", "Diaz");
+            final User user8 = new User("user8@test.com", "user1234", "Steve", "Papa");
+            final User user9 = new User("user9@test.com", "user1234", "John", "Digweed");
+            final User user10 = new User("user10@test.com", "$2a$10$aFZXXmzrebzvdHk0D/Oe8.cgiZrmK0qWvAjhcL8wbLlUZGz8dQ38m", "Nate", "Diaz");
 
             userRepository.saveAll(List.of(user1, user2, user3, user4, user5, user6, user7, user8, user9, user10));
 

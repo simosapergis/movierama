@@ -19,12 +19,13 @@ public class Movie {
     private Long id;
 
     @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "poster_id")
+    @JoinColumn(name = "poster_id", nullable = false)
     private User user;
 
+    @Column(length = 50, nullable = false)
     private String title;
 
-    @Column(length = 1500)
+    @Column(length = 1500, nullable = false)
     private String description;
 
     private LocalDate publicationDate;

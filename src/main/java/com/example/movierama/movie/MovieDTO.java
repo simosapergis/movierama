@@ -17,8 +17,10 @@ public class MovieDTO {
     String title;
     @JsonProperty("description")
     String description;
-    @JsonProperty("postedBy")
+    @JsonProperty("posterName")
     String name;
+    @JsonProperty("posterLastname")
+    String lastName;
     @JsonProperty("posterId")
     Long userId;
     @JsonProperty("postedOn")
@@ -27,4 +29,10 @@ public class MovieDTO {
     int likes;
     @JsonProperty("hates")
     int hates;
+    @JsonProperty("liked")
+    boolean liked;
+    @JsonProperty("hated")
+    boolean hated;
+    @JsonProperty("owned")
+    boolean owned;
 }

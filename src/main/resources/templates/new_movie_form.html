@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Add your movie</title>
+    <link rel="stylesheet" type="text/css" href="/webjars/bootstrap/css/bootstrap.min.css"/>
+</head>
+<body style="padding: 30px;">
+<h2>Add your movie</h2>
+
+<div style="margin-top: 40px;">
+    <form th:action="@{/movies}" method="post" th:object="${movieDTO}" >
+        <div class="form-group row">
+            <label for="title" class="col-sm-2 col-form-label">Title</label>
+            <div class="col-sm-8">
+                <input type="text" class="form-control" th:field="*{title}" maxlength="50" id="title" placeholder="Movie Title" required>
+            </div>
+        </div>
+        <div class="form-group row">
+            <label for="description" class="col-sm-2 col-form-label">Description</label>
+            <div class="col-sm-8">
+                <textarea class="span6" id="description" th:field="*{description}" maxlength="1500" rows="15" placeholder="Movie Description" style="width: 100%" required></textarea>
+            </div>
+        </div>
+        <div style="text-align: center">
+            <button type="submit" class="btn btn-primary mb-2" style="text-align: center;">Add Movie</button>
+        </div>
+
+    </form>
+</div>
+</body>
+</html>
