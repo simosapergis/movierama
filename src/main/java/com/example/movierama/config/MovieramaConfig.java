@@ -19,15 +19,16 @@ public class MovieramaConfig {
     @Bean
     CommandLineRunner commandLineRunner(MovieRepository movieRepository, UserRepository userRepository, MovieOpinionRepository movieOpinionRepository) {
         return args -> {
-            final User user1 = new User("user1@test.com", "user1234", "Frank", "Miller");
-            final User user2 = new User("user2@test.com", "user1234", "Jason", "Momoa");
-            final User user3 = new User("user3@test.com", "user1234", "Mark", "Stores");
-            final User user4 = new User("user4@test.com", "user1234", "Bob", "Michael");
-            final User user5 = new User("user5@test.com", "user1234", "Simos", "Apergis");
-            final User user6 = new User("user6@test.com", "user1234", "Jim", "MIller");
-            final User user7 = new User("user7@test.com", "user1234", "Nick", "Diaz");
-            final User user8 = new User("user8@test.com", "user1234", "Steve", "Papa");
-            final User user9 = new User("user9@test.com", "user1234", "John", "Digweed");
+                                                                        //password : user1234
+            final User user1 = new User("user1@test.com", "$2a$10$aFZXXmzrebzvdHk0D/Oe8.cgiZrmK0qWvAjhcL8wbLlUZGz8dQ38m", "Frank", "Miller");
+            final User user2 = new User("user2@test.com", "$2a$10$aFZXXmzrebzvdHk0D/Oe8.cgiZrmK0qWvAjhcL8wbLlUZGz8dQ38m", "Jason", "Momoa");
+            final User user3 = new User("user3@test.com", "$2a$10$aFZXXmzrebzvdHk0D/Oe8.cgiZrmK0qWvAjhcL8wbLlUZGz8dQ38m", "Mark", "Stores");
+            final User user4 = new User("user4@test.com", "$2a$10$aFZXXmzrebzvdHk0D/Oe8.cgiZrmK0qWvAjhcL8wbLlUZGz8dQ38m", "Bob", "Michael");
+            final User user5 = new User("user5@test.com", "$2a$10$aFZXXmzrebzvdHk0D/Oe8.cgiZrmK0qWvAjhcL8wbLlUZGz8dQ38m", "Simos", "Apergis");
+            final User user6 = new User("user6@test.com", "$2a$10$aFZXXmzrebzvdHk0D/Oe8.cgiZrmK0qWvAjhcL8wbLlUZGz8dQ38m", "Jim", "MIller");
+            final User user7 = new User("user7@test.com", "$2a$10$aFZXXmzrebzvdHk0D/Oe8.cgiZrmK0qWvAjhcL8wbLlUZGz8dQ38m", "Nick", "Diaz");
+            final User user8 = new User("user8@test.com", "$2a$10$aFZXXmzrebzvdHk0D/Oe8.cgiZrmK0qWvAjhcL8wbLlUZGz8dQ38m", "Steve", "Papa");
+            final User user9 = new User("user9@test.com", "$2a$10$aFZXXmzrebzvdHk0D/Oe8.cgiZrmK0qWvAjhcL8wbLlUZGz8dQ38m", "John", "Digweed");
             final User user10 = new User("user10@test.com", "$2a$10$aFZXXmzrebzvdHk0D/Oe8.cgiZrmK0qWvAjhcL8wbLlUZGz8dQ38m", "Nate", "Diaz");
 
             userRepository.saveAll(List.of(user1, user2, user3, user4, user5, user6, user7, user8, user9, user10));
@@ -45,15 +46,33 @@ public class MovieramaConfig {
 
             movieRepository.saveAll(List.of(movie1, movie2, movie3, movie4, movie5, movie6, movie7, movie8, movie9, movie10));
 
-            final MovieOpinion movieOpinion1 = new MovieOpinion(movie2, user1,true, false);
+            final MovieOpinion movieOpinion1 = new MovieOpinion(movie5, user1,true, false);
             final MovieOpinion movieOpinion2 = new MovieOpinion(movie1, user4,true, false);
-            final MovieOpinion movieOpinion3 = new MovieOpinion(movie2, user1,false, true);
+            final MovieOpinion movieOpinion3 = new MovieOpinion(movie4, user1,false, true);
             final MovieOpinion movieOpinion4 = new MovieOpinion(movie4, user3, true, false);
-            final MovieOpinion movieOpinion5 = new MovieOpinion(movie2, user1,false, true);
+            final MovieOpinion movieOpinion5 = new MovieOpinion(movie3, user1,false, true);
             final MovieOpinion movieOpinion6 = new MovieOpinion(movie2, user2, false, true);
             final MovieOpinion movieOpinion7 = new MovieOpinion(movie2, user3, true, false);
+            final MovieOpinion movieOpinion8 = new MovieOpinion(movie5, user5,true, false);
+            final MovieOpinion movieOpinion9 = new MovieOpinion(movie1, user5,true, false);
+            final MovieOpinion movieOpinion10 = new MovieOpinion(movie4, user5,false, true);
+            final MovieOpinion movieOpinion11 = new MovieOpinion(movie4, user6, true, false);
+            final MovieOpinion movieOpinion12 = new MovieOpinion(movie3, user6,false, true);
+            final MovieOpinion movieOpinion13 = new MovieOpinion(movie5, user8,true, false);
+            final MovieOpinion movieOpinion14 = new MovieOpinion(movie1, user8,true, false);
+            final MovieOpinion movieOpinion15 = new MovieOpinion(movie4, user8,false, true);
+            final MovieOpinion movieOpinion16 = new MovieOpinion(movie4, user7, true, false);
+            final MovieOpinion movieOpinion17 = new MovieOpinion(movie10, user1,false, true);
+            final MovieOpinion movieOpinion18 = new MovieOpinion(movie2, user7, false, true);
+            final MovieOpinion movieOpinion19 = new MovieOpinion(movie2, user3, true, false);
+            final MovieOpinion movieOpinion20 = new MovieOpinion(movie10, user2, false, true);
+            final MovieOpinion movieOpinion21 = new MovieOpinion(movie1, user2, true, false);
 
-            movieOpinionRepository.saveAll(List.of(movieOpinion1, movieOpinion2,  movieOpinion3, movieOpinion4, movieOpinion5,movieOpinion6, movieOpinion7));
+
+            movieOpinionRepository.saveAll(List.of(
+                    movieOpinion1, movieOpinion2,  movieOpinion3, movieOpinion4, movieOpinion5,movieOpinion6, movieOpinion7,
+                    movieOpinion8, movieOpinion9,  movieOpinion10, movieOpinion11, movieOpinion12,movieOpinion13, movieOpinion14,
+                    movieOpinion15, movieOpinion16,  movieOpinion17, movieOpinion18, movieOpinion19,movieOpinion20, movieOpinion21));
         };
     }
 }

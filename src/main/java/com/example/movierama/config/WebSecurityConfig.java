@@ -39,29 +39,29 @@ public class WebSecurityConfig {
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-//        http
-//                .authorizeHttpRequests((authz) -> {
-//                            try {
-//                                authz
-//                                        .anyRequest()
-//                                        .authenticated()
-//                                        .and()
-//                                        .formLogin()
-//                                        .usernameParameter("email")
-//                                        .permitAll()
-//                                        .and()
-//                                        .logout()
-//                                        .logoutSuccessUrl("/").permitAll();
-//                            } catch (Exception e) {
-//                                throw new RuntimeException(e);
-//                            }
-//                        }
-//                )
-//                .httpBasic(withDefaults())
-//                .authenticationProvider(authenticationProvider());
-        http.authorizeHttpRequests((authz) ->{
-           authz.anyRequest().permitAll();
-        });
+        http
+                .authorizeHttpRequests((authz) -> {
+                            try {
+                                authz
+                                        .anyRequest()
+                                        .authenticated()
+                                        .and()
+                                        .formLogin()
+                                        .usernameParameter("email")
+                                        .permitAll()
+                                        .and()
+                                        .logout()
+                                        .logoutSuccessUrl("/").permitAll();
+                            } catch (Exception e) {
+                                throw new RuntimeException(e);
+                            }
+                        }
+                )
+                .httpBasic(withDefaults())
+                .authenticationProvider(authenticationProvider());
+//        http.authorizeHttpRequests((authz) ->{
+//           authz.anyRequest().permitAll();
+//        });
         return http.build();
     }
 
