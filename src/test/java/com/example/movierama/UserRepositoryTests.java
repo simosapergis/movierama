@@ -10,10 +10,11 @@ import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabas
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
 import org.springframework.test.annotation.Rollback;
+import org.springframework.test.context.ActiveProfiles;
 
+@ActiveProfiles("test")
 @DataJpaTest
-@AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
-@Rollback(value = false)
+@AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.ANY)
 public class UserRepositoryTests {
 
     @Autowired
@@ -37,6 +38,20 @@ public class UserRepositoryTests {
         assertThat(existUser.getEmail()).isEqualTo(user.getEmail());
     }
 
+    @Test
+    public void testFalseCreateUser() {
+        final User user = new User();
+        user.setEmail("falseSapergis@test.com");
+        user.setPassword("falsef1234");
+        user.setName("falseSimos");
+        user.setLastName("falseApergis");
+
+        final User savedUser = userRepository.save(user);
+
+        final User existUser = testEntityManager.find(User.class, savedUser.getId());
+
+        assertThat(existUser.getEmail()).isNotEqualTo("s@test.com");
+    }
     @Test
     public void testFindUserByEmail() {
         final String email = "sapergis1722@test.com";
