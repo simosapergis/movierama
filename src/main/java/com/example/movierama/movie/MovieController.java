@@ -7,6 +7,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.naming.AuthenticationException;
 import java.util.List;
 
 @RestController
@@ -25,9 +26,14 @@ public class MovieController {
             @RequestParam(value = "postedBy", required = false) User postedBy,
             @RequestParam(value = "sortBy", defaultValue = AppConstants.DEFAULT_SORT_BY, required = false) String sortBy) {
 
-        final List<MovieDTO> moviesList = movieService.getMovies(postedBy, sortBy);
+        try{
+            final List<MovieDTO> moviesList = movieService.getMovies(postedBy, sortBy);
 
-        return new ResponseEntity<>(moviesList, HttpStatus.OK);
+            return new ResponseEntity<>(moviesList, HttpStatus.OK);
+        } catch (AuthenticationException ex) {
+            return new ResponseEntity<>(null, HttpStatus.UNAUTHORIZED);
+        }
+
     }
 
     @PostMapping

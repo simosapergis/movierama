@@ -3,7 +3,6 @@ package com.example.movierama;
 import com.example.movierama.constants.AppConstants;
 import com.example.movierama.movie.MovieDTO;
 import com.example.movierama.movie.MovieService;
-import com.example.movierama.user.CustomUserDetails;
 import com.example.movierama.user.User;
 import com.example.movierama.user.UserService;
 import lombok.extern.slf4j.Slf4j;
@@ -14,6 +13,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import javax.naming.AuthenticationException;
 import java.util.List;
 
 @Slf4j
@@ -33,21 +33,20 @@ public class MovieramaController {
     public String viewHomePage(Model model,
                                @RequestParam(value = "postedBy", required = false) User postedBy,
                                @RequestParam(value = "sortBy", defaultValue = AppConstants.DEFAULT_SORT_BY, required = false) String sortBy) {
-        CustomUserDetails.isUserAuthenticated();
-        List<MovieDTO> movies = movieService.getMovies(postedBy, sortBy);
-        model.addAttribute("movies", movies);
+
+        try {
+            final List<MovieDTO> movies = movieService.getMovies(postedBy, sortBy);
+            model.addAttribute("movies", movies);
+        } catch (AuthenticationException ex) {
+
+        }
+
         return "index";
+
     }
 
     @GetMapping("/register")
     public String showSignUpForm(Model model) {
-
-//        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-//        User user = ((CustomUserDetails)((UsernamePasswordAuthenticationToken)auth).getPrincipal()).getUser();
-//
-//        if (user != null)
-//            //code
-//
         model.addAttribute("user", new User());
 
         return "signup_form";
