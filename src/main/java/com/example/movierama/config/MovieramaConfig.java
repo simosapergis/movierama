@@ -16,7 +16,7 @@ import java.util.List;
 @Configuration
 public class MovieramaConfig {
 
-    @Bean
+
     CommandLineRunner commandLineRunner(MovieRepository movieRepository, UserRepository userRepository, MovieOpinionRepository movieOpinionRepository) {
         return args -> {
                                                                         //password : user1234

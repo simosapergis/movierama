@@ -14,9 +14,7 @@ import org.springframework.stereotype.Service;
 
 import javax.naming.AuthenticationException;
 import java.time.LocalDateTime;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
@@ -39,7 +37,7 @@ public class MovieService {
         modelMapper.getConfiguration().setMatchingStrategy(MatchingStrategies.LOOSE);
     }
 
-    public List<MovieDTO> getMovies(User user, String sortBy) throws AuthenticationException{
+    public List<MovieDTO> getMovies(User user, String sortBy) throws AuthenticationException {
         final Sort sort = Sort.by(sortBy).descending();
 
         List<Movie> movies;
@@ -62,45 +60,54 @@ public class MovieService {
     public MovieDTO addMovie(MovieDTO movieDTO) {
         final Movie movie = modelMapper.map(movieDTO, Movie.class);
         movie.setPublicationDate(LocalDateTime.now());
+        movie.setUser(CustomUserDetails.getAuthenticatedUser());
         movieRepository.save(movie);
 
         return modelMapper.map(movie, MovieDTO.class);
     }
 
-    private List<MovieDTO> moviesListForAuthenticated(List<Movie> allMovies) throws AuthenticationException{
+    private List<MovieDTO> moviesListForAuthenticated(List<Movie> allMovies) throws AuthenticationException {
         log.info("Returning list for authenticated user");
 
         final User authenticatedUser = CustomUserDetails.getAuthenticatedUser();
 
+        //If by any chance the user is non authenticated, throw exception
         if (authenticatedUser == null)
             throw new AuthenticationException("There is no authenticated user.");
 
-        final Optional<List<MovieOpinion>> movieOpinionsOpt = movieOpinionRepository.findAllByUser(authenticatedUser);
+        //Fetch Optional object with all movie opinions by the user, if any
+        final Optional<List<MovieOpinion>> optOpinionsListForUser = movieOpinionRepository.findAllByUser(authenticatedUser);
+        List<MovieOpinion> opinionsListForUser = new ArrayList<>();
 
+        //If movie opinions found, get the list from Optional
+        if (optOpinionsListForUser.isPresent()) {
+            opinionsListForUser = optOpinionsListForUser.get();
+        }
 
-        if (movieOpinionsOpt.isPresent()) {
-            final List<MovieOpinion> movieOpinionsList = movieOpinionsOpt.get();
-            final Map<Long, MovieOpinion> moviesUserReacted = movieOpinionsList.stream()
-                    .collect(Collectors.toMap(m -> m.getMovie().getId(), Function.identity()));
+        //Create a HashMap of MovieOpinions having as key the movie Id, for convenience
+        final Map<Long, MovieOpinion> moviesUserReacted = opinionsListForUser.stream()
+                .collect(Collectors.toMap(m -> m.getMovie().getId(), Function.identity()));
 
-            return allMovies.stream()
-                    .map(movie -> {
-                        final MovieDTO movieDTO = modelMapper.map(movie, MovieDTO.class);
+        //create a stream and process all movies in order to create the MovieDTO for the response
+        return allMovies.stream()
+                .map(movie -> {
+                    final MovieDTO movieDTO = modelMapper.map(movie, MovieDTO.class);
+
+                    //Indicating if the user is the owner of the current Movie post
+                    movieDTO.owned = movie.getUser().getId().equals(authenticatedUser.getId());
+
+                    //If movie opinions exist for the current user, add information if user liked/hated the movie
+                    if (moviesUserReacted.size() > 0) {
                         final MovieOpinion userOpinion = moviesUserReacted.get(movie.getId());
 
-                        movieDTO.owned = movie.getUser().getId().equals(authenticatedUser.getId());
-
-                        if (userOpinion!= null) {
+                        if (userOpinion != null) {
                             movieDTO.liked = userOpinion.getLiked();
                             movieDTO.hated = userOpinion.getHated();
                         }
+                    }
 
-                        return movieDTO;
+                    return movieDTO;
 
-                    }).toList();
-
-        }
-
-        return  null;
+                }).toList();
     }
 }
