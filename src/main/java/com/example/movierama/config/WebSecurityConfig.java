@@ -58,7 +58,11 @@ public class WebSecurityConfig {
                         }
                 )
                 .httpBasic(withDefaults())
-                .authenticationProvider(authenticationProvider());
+                .authenticationProvider(authenticationProvider())
+                .cors()
+                .and()
+                .csrf()
+                .disable();
 //        http.authorizeHttpRequests((authz) ->{
 //           authz.anyRequest().permitAll();
 //        });
