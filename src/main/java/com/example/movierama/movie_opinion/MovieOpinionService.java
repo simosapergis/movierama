@@ -1,6 +1,7 @@
 package com.example.movierama.movie_opinion;
 
 import com.example.movierama.movie.Movie;
+import com.example.movierama.user.CustomUserDetails;
 import com.example.movierama.user.User;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,11 +25,12 @@ public class MovieOpinionService {
         return movieOpinionRepository.findAll();
     }
 
-    public MovieOpinion submitLike(User user, Movie movie) {
-        final Optional<MovieOpinion> optionalOpinion = movieOpinionRepository.findByUserAndMovie(user, movie);
+    public MovieOpinion submitLike(Movie movie) {
+        final User authenticatedUser = CustomUserDetails.getAuthenticatedUser();
+        final Optional<MovieOpinion> optionalOpinion = movieOpinionRepository.findByUserAndMovie(authenticatedUser, movie);
 
         if (optionalOpinion.isPresent()) {
-            log.info("Opinion exists for user " + user.getName() + " and movie " + movie.getTitle());
+            log.info("Opinion exists for user " + authenticatedUser.getName() + " and movie " + movie.getTitle());
 
             final MovieOpinion movieOpinion = optionalOpinion.get();
             //Toggle in case the movie is already liked by the user
@@ -37,19 +39,20 @@ public class MovieOpinionService {
 
             return movieOpinionRepository.save(movieOpinion);
         } else {
-            log.info("Opinion does not exist for user " + user.getName() + " and movie " + movie.getTitle());
+            log.info("Opinion does not exist for user " + authenticatedUser.getName() + " and movie " + movie.getTitle());
 
-            MovieOpinion newMovieOpinion = new MovieOpinion(movie, user, true, false);
+            MovieOpinion newMovieOpinion = new MovieOpinion(movie, authenticatedUser, true, false);
 
             return movieOpinionRepository.save(newMovieOpinion);
         }
     }
 
-    public MovieOpinion submitHate(User user, Movie movie) {
-        final Optional<MovieOpinion> optionalOpinion = movieOpinionRepository.findByUserAndMovie(user, movie);
+    public MovieOpinion submitHate(Movie movie) {
+        final User authenticatedUser = CustomUserDetails.getAuthenticatedUser();
+        final Optional<MovieOpinion> optionalOpinion = movieOpinionRepository.findByUserAndMovie(authenticatedUser, movie);
 
         if (optionalOpinion.isPresent()) {
-            log.info("Opinion exists for user " + user.getName() + " and movie " + movie.getTitle());
+            log.info("Opinion exists for user " + authenticatedUser.getName() + " and movie " + movie.getTitle());
 
             final MovieOpinion movieOpinion = optionalOpinion.get();
             //Toggle in case the movie is already liked by the user
@@ -58,9 +61,9 @@ public class MovieOpinionService {
 
             return movieOpinionRepository.save(movieOpinion);
         } else {
-            log.info("Opinion does not exist for user " + user.getName() + " and movie " + movie.getTitle());
+            log.info("Opinion does not exist for user " + authenticatedUser.getName() + " and movie " + movie.getTitle());
 
-            MovieOpinion newMovieOpinion = new MovieOpinion(movie, user, false, true);
+            MovieOpinion newMovieOpinion = new MovieOpinion(movie, authenticatedUser, false, true);
 
             return movieOpinionRepository.save(newMovieOpinion);
         }

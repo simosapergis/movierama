@@ -1,7 +1,6 @@
 package com.example.movierama.movie_opinion;
 
 import com.example.movierama.movie.Movie;
-import com.example.movierama.user.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -27,13 +26,13 @@ public class MovieOpinionController {
         return new ResponseEntity<>(movieOpinions, HttpStatus.OK);
     }
 
-    @RequestMapping(path = "/{movieId}/user/{userId}/like", method = RequestMethod.POST, produces = "application/json")
-    MovieOpinion likeMovie(@PathVariable("movieId") Movie movie, @PathVariable("userId") User user) {
-        return movieOpinionService.submitLike(user, movie);
+    @RequestMapping(path = "/{movieId}/like", method = RequestMethod.POST, produces = "application/json")
+    MovieOpinion likeMovie(@PathVariable("movieId") Movie movie) {
+        return movieOpinionService.submitLike(movie);
     }
 
-    @RequestMapping(path = "/{movieId}/user/{userId}/hate", method = RequestMethod.POST, produces = "application/json")
-    MovieOpinion hateMovie(@PathVariable("movieId") Movie movie, @PathVariable("userId") User user) {
-        return movieOpinionService.submitHate(user, movie);
+    @RequestMapping(path = "/{movieId}/hate", method = RequestMethod.POST, produces = "application/json")
+    MovieOpinion hateMovie(@PathVariable("movieId") Movie movie) {
+        return movieOpinionService.submitHate(movie);
     }
 }
