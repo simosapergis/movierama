@@ -1,24 +1,23 @@
 <!DOCTYPE html>
-<html xmlns::th="http://www.thymeleaf.org" xmlns:sec="http://www.w3.org/1999/xhtml" lang="en">
+<html lang="es" xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <head>
     <meta charset="UTF-8">
     <title>Home - MovieRama</title>
     <link rel="stylesheet" type="text/css" href="/webjars/bootstrap/css/bootstrap.min.css"/>
+    <script src="https://unpkg.com/htmx.org@1.8.5" integrity="sha384-7aHh9lqPYGYZ7sTHvzP1t3BAfLhYSTy9ArHdP3Xsr9/3TlGurYgcPBoFmXX2TX/w" crossorigin="anonymous"></script>
 </head>
 <body>
 
-<div sec:authorize="isAuthenticated()">
-    User is authenticated
-</div>
+<div th:text="${@auth.isUserAuthenticated()}"> </div>
 
-<div sec:authorize="isAnonymous()">
-    Is Anonymous
-</div>
+<div th:if="${@auth.isUserAuthenticated()}" th:text="${@authenticated.getAuthenticatedUserFullName()}"></div>
 
 <div class="container">
     <div style="display: flex; justify-content: space-between; width: 85%;  align-items: center; margin: 15px 0 15px 0;">
         <h1>MovieRama</h1>
-        <div sec:authorize="is">
+        <div>
             <a th:href="@{/login}">Log in</a> Or <a th:href="@{/register}" class="btn btn-primary">Sign up</a>
         </div>
     </div>
@@ -45,7 +44,8 @@
                 <p th:text="${movie.description}"></p>
                 <br>
                 <p>
-                    <a th:text="'Likes ' + ${movie.likes}" th:href="@{#}">likes</a> |
+<!--                    <a th:text="'Likes ' + ${movie.likes}" th:href="@{'/api/v1/movie-opinions/'+${movie.id}+'/user/11/like'}">likes</a> |-->
+                    <a th:text="'Likes ' + ${movie.likes}" hx-trigger="click" th:attr="hx-get=@{'/api/v1/movie-opinions/'+${movie.id}+'/user/2/like'}">likes</a> |
                     <a th:text="'Hates ' + ${movie.hates}" th:href="@{#}"></a>
                 </p>
             </div>
