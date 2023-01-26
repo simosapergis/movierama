@@ -10,77 +10,102 @@
 </head>
 <body th:with="isUserAuthenticated=${@auth.isUserAuthenticated()}">
 
-<div th:text="${isUserAuthenticated}"> </div>
-
-<div th:if="${isUserAuthenticated}" th:text="${@authenticated.getAuthenticatedUserFullName()}"></div>
-
-<div class="container">
-    <div style="display: flex; justify-content: space-between; width: 85%;  align-items: center; margin: 15px 0 15px 0;">
-        <h1>MovieRama</h1>
-        <div th:if="${isUserAuthenticated}">
-            Welcome back <a th:href="@{/logout}" th:text="${@authenticated.getAuthenticatedUserFullName()}"></a>
-        </div>
-        <div th:if="!${isUserAuthenticated}">
-            <a th:href="@{/login}">Log in</a> Or <a th:href="@{/register}" class="btn btn-primary">Sign up</a>
-        </div>
-    </div>
-
-    <div style="display: flex;">
-        <div class="sort-area" style="width: 85%; background-color: aliceblue; border: 3px solid black; padding: 15px; margin-bottom: 15px;">
-            <div class="flex-container">
-                <span>Sort by:</span> <a th:href="@{'/?sortBy=likes'}">Likes</a> | <a th:href="@{'/?sortBy=hates'}">Hates</a> | <a th:href="@{'/?sortBy=publicationDate'}">Date</a>
+    <div class="container">
+        <div style="display: flex; justify-content: space-between; width: 85%;  align-items: center; margin: 15px 0 15px 0;">
+            <h1>MovieRama</h1>
+            <div th:if="${isUserAuthenticated}">
+                Welcome back <a th:href="@{/logout}" th:text="${@authenticated.getAuthenticatedUserFullName()}"></a>
+            </div>
+            <div th:if="!${isUserAuthenticated}">
+                <a th:href="@{/login}">Log in</a> Or <a th:href="@{/register}" class="btn btn-primary">Sign up</a>
             </div>
         </div>
-        <div th:if="${isUserAuthenticated}">
-            <a class="btn btn-info" th:href="@{/new_movie_form}"
-               style="height: 60px; margin-left: 15px; display: flex; align-items: center; width: 150px; justify-content: center;">New
-                Movie</a>
-        </div>
-    </div>
 
-
-    <div style="width:100%; z-index:10;">
-        <tr th:each="movie : ${movies}">
-            <div style="border: 3px solid black; padding: 20px; margin-bottom: 10px; width: 85%;">
-                <h2 th:text="${movie.title}">title</h2>
-                <p> Posted by
-                    <a th:text="${movie.owned ? 'You' : movie.name + ' ' + movie.lastName + ' '}" th:href="@{'/?postedBy='+${movie.getUserId()}}"></a>
-                    <span th:text="${movie.postedWhen}"></span></p>
-                <p th:text="${movie.description}"></p>
-                <br>
-
-                <div id="opinions-area">
-                    <!-- If User is unauthorized or is authorized and owner of the post, don't allow opinion-->
-                    <p th:if="${!isUserAuthenticated || (isUserAuthenticated && movie.owned)}" style="display: flex">
-                        <span th:text="'Likes ' + ${movie.likes}" style="margin-right: 5px;">likes</span> |
-                        <span th:text="'Hates ' + ${movie.hates}" style="margin-left: 5px;"></span>
-                    </p>
-
-                    <!-- If User is authorized and is not the owner of the post, allow opinion-->
-                    <div style="display: flex; position:relative;" th:if="${isUserAuthenticated && !movie.owned}">
-                        <p>
-                        <div>
-                            <a th:text="'Likes ' + ${movie.likes}" hx-trigger="click" th:attr="hx-post=@{'/api/v1/movie-opinions/'+${movie.id}+'/like'}">likes</a> |
-                            <a th:text="'Hates ' + ${movie.hates}" hx-trigger="click" th:attr="hx-post=@{'/api/v1/movie-opinions/'+${movie.id}+'/hate'}">hates</a>
-                        </div>
-                        <div th:if="${movie.liked || movie.hated}" style="position: absolute; right: 0;">
-                            <div style="display: flex">
-                                <div th:text="'You ' + ${movie.liked ? 'like' : 'hate' } +' this movie | '"></div>
-                                <a th:text="${movie.liked ? 'Unlike' : 'Unhate' }"
-                                   hx-trigger="click"
-                                   th:attr="hx-post=@{'/api/v1/movie-opinions/'+${movie.id}+'/'+${movie.liked ? 'like' : 'hate'}}"
-                                >
-                                </a>
-                            </div>
-                        </div>
-                        </p>
-                    </div>
+        <div style="display: flex;">
+            <div class="sort-area" style="width: 85%; background-color: aliceblue; border: 3px solid black; padding: 15px; margin-bottom: 15px;">
+                <div class="flex-container">
+                    <span>Sort by:</span> <a th:href="@{'/?sortBy=likes'}">Likes</a> | <a th:href="@{'/?sortBy=hates'}">Hates</a> | <a th:href="@{'/?sortBy=publicationDate'}">Date</a>
                 </div>
-
             </div>
-        </tr>
-    </div>
+            <div th:if="${isUserAuthenticated}">
+                <a class="btn btn-info" th:href="@{/new_movie_form}"
+                   style="height: 60px; margin-left: 15px; display: flex; align-items: center; width: 150px; justify-content: center;">New
+                    Movie</a>
+            </div>
+        </div>
 
-</div>
+
+        <div style="width:100%; z-index:10;">
+            <tr th:each="movie : ${movies}">
+                <div style="border: 3px solid black; padding: 20px; margin-bottom: 10px; width: 85%;">
+                    <h2 th:text="${movie.title}">title</h2>
+                    <p> Posted by
+                        <a th:text="${movie.owned ? 'You' : movie.name + ' ' + movie.lastName + ' '}" th:href="@{'/?postedBy='+${movie.getUserId()}}"></a>
+                        <span th:text="${movie.postedWhen}"></span></p>
+                    <p th:text="${movie.description}"></p>
+                    <br>
+
+                    <div id="opinions-area">
+                        <!-- If User is unauthorized or is authorized and owner of the post, don't allow opinion-->
+                        <div id="op-immutable" th:if="${!isUserAuthenticated || (isUserAuthenticated && movie.owned)}">
+                            <p  style="display: flex">
+                                <span th:text="'Likes ' + ${movie.likes}" style="margin-right: 5px;">likes</span> |
+                                <span th:text="'Hates ' + ${movie.hates}" style="margin-left: 5px;"></span>
+                            </p>
+                        </div>
+
+
+                        <!-- If User is authorized and is not the owner of the post, allow opinion-->
+                        <span id="op-mutable" style="display: flex; position:relative;"
+                             th:if="${isUserAuthenticated && !movie.owned}">
+                            <p>
+
+                            <div style="display: flex">
+                                <a th:if="${!movie.liked}"
+                                   th:text="'Likes ' + ${movie.likes}"
+                                   style="color: #007bff; cursor: pointer; margin-right: 5px;"
+                                   hx-trigger="click"
+                                   th:attr="hx-post=@{'/api/v1/movie-opinions/'+${movie.id}+'/like'}"
+                                   hx-target="closest span"
+                                   hx-swap="outerHTML"
+                                />
+                                <div th:if="${movie.liked}"
+                                     th:text="'Likes ' + ${movie.likes}"
+                                     style="margin-right: 5px;">
+                                </div>
+                                |
+                                <a th:if="${!movie.hated}"
+                                   th:text="'Hates ' + ${movie.hates}"
+                                   style="color: #007bff; cursor: pointer; margin-left: 5px;"
+                                   hx-trigger="click"
+                                   th:attr="hx-post=@{'/api/v1/movie-opinions/'+${movie.id}+'/hate'}"
+                                   hx-target="closest span"
+                                   hx-swap="outerHTML"
+                                />
+                                <div th:if="${movie.hated}"
+                                     th:text="'Hates ' + ${movie.hates}"
+                                     style="margin-left: 5px;">
+                                </div>
+                            </div>
+
+                            <div th:if="${movie.liked || movie.hated}" style="position: absolute; right: 0;">
+                                <div style="display: flex">
+                                    <div th:text="'You ' + ${movie.liked ? 'like' : 'hate' } +' this movie | '"></div>
+                                    <a th:text="${movie.liked ? 'Unlike' : 'Unhate' }" style="margin-left: 5px; color: #007bff; cursor: pointer;"
+                                       hx-trigger="click"
+                                       hx-target="closest span"
+                                       th:attr="hx-post=@{'/api/v1/movie-opinions/'+${movie.id}+'/'+${movie.liked ? 'like' : 'hate'}}"
+                                    />
+                                </div>
+                            </div>
+                        </span>
+
+                    </div>
+
+                </div>
+            </tr>
+        </div>
+
+    </div>
 </body>
 </html>
