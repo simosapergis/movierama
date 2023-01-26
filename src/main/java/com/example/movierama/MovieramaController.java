@@ -5,10 +5,12 @@ import com.example.movierama.movie.MovieDTO;
 import com.example.movierama.movie.MovieService;
 import com.example.movierama.user.User;
 import com.example.movierama.user.UserService;
+import jakarta.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -53,7 +55,10 @@ public class MovieramaController {
     }
 
     @PostMapping("/process_register")
-    public String processRegistration(User user) {
+    public String processRegistration(@Valid User user, BindingResult bindingResult) {
+        if (bindingResult.hasErrors())
+            return "signup_form";
+
         userService.processRegistration(user);
 
         return "registration_success";
