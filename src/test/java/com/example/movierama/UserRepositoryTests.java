@@ -9,7 +9,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
-import org.springframework.test.annotation.Rollback;
 import org.springframework.test.context.ActiveProfiles;
 
 @ActiveProfiles("test")
@@ -54,6 +53,7 @@ public class UserRepositoryTests {
     }
     @Test
     public void testFindUserByEmail() {
+        testCreateUser();
         final String email = "sapergis1722@test.com";
         final User user = userRepository.findByEmail(email);
 
