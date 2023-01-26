@@ -7,7 +7,6 @@ import com.example.movierama.movie.MovieRepository;
 import com.example.movierama.user.User;
 import com.example.movierama.user.UserRepository;
 import org.springframework.boot.CommandLineRunner;
-import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 import java.time.LocalDateTime;
@@ -64,7 +63,7 @@ public class MovieramaConfig {
             final MovieOpinion movieOpinion16 = new MovieOpinion(movie4, user7, true, false);
             final MovieOpinion movieOpinion17 = new MovieOpinion(movie10, user1,false, true);
             final MovieOpinion movieOpinion18 = new MovieOpinion(movie2, user7, false, true);
-            final MovieOpinion movieOpinion19 = new MovieOpinion(movie2, user3, true, false);
+            final MovieOpinion movieOpinion19 = new MovieOpinion(movie10, user3, true, false);
             final MovieOpinion movieOpinion20 = new MovieOpinion(movie10, user2, false, true);
             final MovieOpinion movieOpinion21 = new MovieOpinion(movie1, user2, true, false);
 
