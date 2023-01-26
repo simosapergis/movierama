@@ -17,5 +17,5 @@ public interface MovieOpinionRepository extends JpaRepository<MovieOpinion, Long
 
     int countByLikedIsTrueAndMovie(Movie movie);
 
-    int countByLikedIsFalseAndMovie(Movie movie);
+    int countByHatedIsTrueAndMovie(Movie movie);
 }

@@ -25,21 +25,36 @@ public class MovieOpinionResponse {
         this.updatedHatesCount = updatedHatesCount;
     }
 
-    String createLikeResponse() {
+    public String createLikeResponse() {
         final StringBuilder sb = new StringBuilder(OPEN_HTML_ELEMENT);
 
         if (movieOpinion.getLiked()) {
             sb.append(selectableHateElementOnly());
             sb.append(likedMovieText());
         } else{
-            sb.append(selectableAllOpinionElements(movieOpinion.getMovie(),updatedLikesCount));
+            sb.append(selectableAllOpinionElements());
         }
 
 
         return  sb.append(CLOSE_HTML_ELEMENT).toString();
     }
 
-    private static String selectableAllOpinionElements(Movie movie, int updatedLikesCount) {
+
+    public String createHateResponse() {
+        final StringBuilder sb = new StringBuilder(OPEN_HTML_ELEMENT);
+
+        if (movieOpinion.getHated()) {
+            sb.append(selectableLikeElementOnly());
+            sb.append(hatedMovieText());
+        } else{
+            sb.append(selectableAllOpinionElements());
+        }
+
+
+        return  sb.append(CLOSE_HTML_ELEMENT).toString();
+    }
+
+    private String selectableAllOpinionElements() {
         final String opinionsArea = """
                     <p>
                     <div style="display: flex;">
@@ -56,7 +71,7 @@ public class MovieOpinionResponse {
                     </div>
                 """;
 
-        return String.format(opinionsArea, movie.getId(), updatedLikesCount, movie.getId(), movie.getHates());
+        return String.format(opinionsArea, movie.getId(), updatedLikesCount, movie.getId(), updatedHatesCount);
     }
 
     private String selectableLikeElementOnly() {
@@ -64,7 +79,7 @@ public class MovieOpinionResponse {
                         <p>
                         <div style="display: flex;">
                             <a hx-trigger="click" hx-post="/api/v1/movie-opinions/%s/like"
-                               hx-target="closest span" 
+                               hx-target="closest span"
                                hx-swap="outerHTML" style="color: #007bff; cursor: pointer;"
                                >Likes %s |
                             </a>
@@ -73,7 +88,7 @@ public class MovieOpinionResponse {
                         </div>
                     """;
 
-        return String.format(opinionsArea, movie.getId(), movie.getLikes(), updatedHatesCount);
+        return String.format(opinionsArea, movie.getId(), updatedLikesCount, updatedHatesCount);
     }
 
     private String selectableHateElementOnly() {
@@ -90,7 +105,7 @@ public class MovieOpinionResponse {
                         </div>
                     """;
 
-        return String.format(opinionsArea, updatedLikesCount, movie.getId(), movie.getHates());
+        return String.format(opinionsArea, updatedLikesCount, movie.getId(), updatedHatesCount);
     }
 
     private String likedMovieText() {
@@ -114,7 +129,7 @@ public class MovieOpinionResponse {
         String likedMovieText = """
             <div style="position: absolute; right: 0;">
                 <div style="display: flex">
-                    <div>You liked this movie | </div>
+                    <div>You hated this movie | </div>
                     <a style="margin-left: 5px; color: #007bff; cursor: pointer;"
                         hx-trigger="click"
                         hx-target="closest span"
@@ -126,4 +141,5 @@ public class MovieOpinionResponse {
 
         return String.format(likedMovieText, movie.getId());
     }
+
 }

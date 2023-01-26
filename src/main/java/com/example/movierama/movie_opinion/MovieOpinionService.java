@@ -51,30 +51,36 @@ public class MovieOpinionService {
 
         final MovieOpinion storedOpinion = movieOpinionRepository.saveAndFlush(movieOpinion);
         final int updatedLikesCount = movieOpinionRepository.countByLikedIsTrueAndMovie(storedOpinion.getMovie());
-        final MovieOpinionResponse response = new MovieOpinionResponse(storedOpinion, updatedLikesCount, movie.getHates());
+        final int updatedHatesCount = movieOpinionRepository.countByHatedIsTrueAndMovie(storedOpinion.getMovie());
+        final MovieOpinionResponse response = new MovieOpinionResponse(storedOpinion, updatedLikesCount, updatedHatesCount);
 
         return response.createLikeResponse();
     }
 
-    public MovieOpinion submitHate(Movie movie) {
+    public String submitHate(Movie movie) {
         final User authenticatedUser = CustomUserDetails.getAuthenticatedUser();
-        final Optional<MovieOpinion> optionalOpinion = movieOpinionRepository.findByUserAndMovie(authenticatedUser, movie);
+        final Optional<MovieOpinion> optionalExistingOpinion = movieOpinionRepository.findByUserAndMovie(authenticatedUser, movie);
+        MovieOpinion movieOpinion;
 
-        if (optionalOpinion.isPresent()) {
-            log.info("Opinion exists for user " + authenticatedUser.getName() + " and movie " + movie.getTitle());
+        if (optionalExistingOpinion.isPresent()) {
+            log.info("User {} opinion for movie {} already exists", authenticatedUser.getName(), movie.getTitle());
 
-            final MovieOpinion movieOpinion = optionalOpinion.get();
+            movieOpinion = optionalExistingOpinion.get();
             //Toggle in case the movie is already liked by the user
             movieOpinion.setHated(!movieOpinion.getHated());
             movieOpinion.setLiked(false);
 
-            return movieOpinionRepository.save(movieOpinion);
         } else {
-            log.info("Opinion does not exist for user " + authenticatedUser.getName() + " and movie " + movie.getTitle());
+            log.info("User {} has no existing opinion for movie {}", authenticatedUser.getName(), movie.getTitle());
 
-            MovieOpinion newMovieOpinion = new MovieOpinion(movie, authenticatedUser, false, true);
-
-            return movieOpinionRepository.save(newMovieOpinion);
+            movieOpinion = new MovieOpinion(movie, authenticatedUser, false, true);
         }
+
+        final MovieOpinion storedOpinion = movieOpinionRepository.saveAndFlush(movieOpinion);
+        final int updatedLikesCount = movieOpinionRepository.countByLikedIsTrueAndMovie(storedOpinion.getMovie());
+        final int updatedHatesCount = movieOpinionRepository.countByHatedIsTrueAndMovie(storedOpinion.getMovie());
+        final MovieOpinionResponse response = new MovieOpinionResponse(storedOpinion, updatedLikesCount, updatedHatesCount);
+
+        return response.createHateResponse();
     }
 }

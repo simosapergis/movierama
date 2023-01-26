@@ -32,7 +32,7 @@ public class MovieOpinionController {
     }
 
     @RequestMapping(path = "/{movieId}/hate", method = RequestMethod.POST, produces = "application/json")
-    MovieOpinion hateMovie(@PathVariable("movieId") Movie movie) {
+    String hateMovie(@PathVariable("movieId") Movie movie) {
         return movieOpinionService.submitHate(movie);
     }
 }
