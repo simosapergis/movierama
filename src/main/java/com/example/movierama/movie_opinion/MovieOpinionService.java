@@ -1,6 +1,7 @@
 package com.example.movierama.movie_opinion;
 
 import com.example.movierama.movie.Movie;
+import com.example.movierama.movie.MovieRepository;
 import com.example.movierama.user.CustomUserDetails;
 import com.example.movierama.user.User;
 import lombok.extern.slf4j.Slf4j;
@@ -16,35 +17,43 @@ import java.util.Optional;
 public class MovieOpinionService {
     private final MovieOpinionRepository movieOpinionRepository;
 
+    private final MovieRepository movieRepository;
+
     @Autowired
-    public MovieOpinionService(MovieOpinionRepository movieOpinionRepository) {
+    public MovieOpinionService(MovieOpinionRepository movieOpinionRepository, MovieRepository movieRepository) {
         this.movieOpinionRepository = movieOpinionRepository;
+        this.movieRepository = movieRepository;
     }
 
     List<MovieOpinion> getOpinions() {
         return movieOpinionRepository.findAll();
     }
 
-    public MovieOpinion submitLike(Movie movie) {
+    public String submitLike(Movie movie) {
         final User authenticatedUser = CustomUserDetails.getAuthenticatedUser();
-        final Optional<MovieOpinion> optionalOpinion = movieOpinionRepository.findByUserAndMovie(authenticatedUser, movie);
+        final Optional<MovieOpinion> optionalExistingOpinion = movieOpinionRepository.findByUserAndMovie(authenticatedUser, movie);
+        MovieOpinion movieOpinion;
 
-        if (optionalOpinion.isPresent()) {
-            log.info("Opinion exists for user " + authenticatedUser.getName() + " and movie " + movie.getTitle());
+        if (optionalExistingOpinion.isPresent()) {
+            log.info("User {} opinion for movie {} already exists", authenticatedUser.getName(), movie.getTitle());
 
-            final MovieOpinion movieOpinion = optionalOpinion.get();
+            movieOpinion = optionalExistingOpinion.get();
             //Toggle in case the movie is already liked by the user
             movieOpinion.setLiked(!movieOpinion.getLiked());
             movieOpinion.setHated(false);
 
-            return movieOpinionRepository.save(movieOpinion);
         } else {
-            log.info("Opinion does not exist for user " + authenticatedUser.getName() + " and movie " + movie.getTitle());
+            log.info("User {} has no existing opinion for movie {}", authenticatedUser.getName(), movie.getTitle());
 
-            MovieOpinion newMovieOpinion = new MovieOpinion(movie, authenticatedUser, true, false);
-
-            return movieOpinionRepository.save(newMovieOpinion);
+            movieOpinion = new MovieOpinion(movie, authenticatedUser, true, false);
         }
+
+
+        final MovieOpinion storedOpinion = movieOpinionRepository.saveAndFlush(movieOpinion);
+        final int updatedLikesCount = movieOpinionRepository.countByLikedIsTrueAndMovie(storedOpinion.getMovie());
+        final MovieOpinionResponse response = new MovieOpinionResponse(storedOpinion, updatedLikesCount, movie.getHates());
+
+        return response.createLikeResponse();
     }
 
     public MovieOpinion submitHate(Movie movie) {

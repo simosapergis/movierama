@@ -27,7 +27,7 @@ public class MovieOpinionController {
     }
 
     @RequestMapping(path = "/{movieId}/like", method = RequestMethod.POST, produces = "application/json")
-    MovieOpinion likeMovie(@PathVariable("movieId") Movie movie) {
+    String likeMovie(@PathVariable("movieId") Movie movie) {
         return movieOpinionService.submitLike(movie);
     }
 
