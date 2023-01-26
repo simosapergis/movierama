@@ -83,7 +83,7 @@ public class MovieOpinionResponse {
                                hx-swap="outerHTML" style="color: #007bff; cursor: pointer;"
                                >Likes %s |
                             </a>
-                            <div> Hates %s
+                            <div style="margin-left: 5px;">Hates %s
                             </div>
                         </div>
                     """;
