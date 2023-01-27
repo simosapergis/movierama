@@ -65,7 +65,7 @@ public class MovieOpinionResponse {
                         </a>
                         <a hx-trigger="click" hx-post="/api/v1/movie-opinions/%s/hate"
                            hx-target="closest span"
-                           hx-swap="outerHTML" style="color: #007bff; cursor: pointer;"
+                           hx-swap="outerHTML" style="margin-left: 5px; color: #007bff; cursor: pointer;"
                            >Hates %s
                         </a>
                     </div>
@@ -99,7 +99,7 @@ public class MovieOpinionResponse {
                             </div>
                             <a hx-trigger="click" hx-post="/api/v1/movie-opinions/%s/hate"
                                hx-target="closest span"
-                               hx-swap="outerHTML" style="color: #007bff; cursor: pointer;"
+                               hx-swap="outerHTML" style="margin-left: 5px; color: #007bff; cursor: pointer;"
                                > Hates %s
                             </a>
                         </div>
