@@ -40,7 +40,7 @@ public class MovieramaController {
             final List<MovieDTO> movies = movieService.getMovies(postedBy, sortBy);
             model.addAttribute("movies", movies);
         } catch (AuthenticationException ex) {
-
+            log.info("Exception caught : {}", ex.getMessage());
         }
 
         return "index";
@@ -74,5 +74,10 @@ public class MovieramaController {
     public String addNewMovie(MovieDTO movieDTO) {
         movieService.addMovie(movieDTO);
         return "add_movie_success";
+    }
+
+    @GetMapping("/logout_page")
+    public String getLogoutPage() {
+        return "logout_page";
     }
 }
