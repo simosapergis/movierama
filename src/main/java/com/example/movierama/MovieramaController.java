@@ -2,6 +2,7 @@ package com.example.movierama;
 
 import com.example.movierama.constants.AppConstants;
 import com.example.movierama.movie.MovieDTO;
+import com.example.movierama.movie.MovieResponse;
 import com.example.movierama.movie.MovieService;
 import com.example.movierama.user.User;
 import com.example.movierama.user.UserService;
@@ -16,7 +17,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import javax.naming.AuthenticationException;
-import java.util.List;
 
 @Slf4j
 @Controller
@@ -34,11 +34,16 @@ public class MovieramaController {
     @GetMapping("/")
     public String viewHomePage(Model model,
                                @RequestParam(value = "postedBy", required = false) User postedBy,
-                               @RequestParam(value = "sortBy", defaultValue = AppConstants.DEFAULT_SORT_BY, required = false) String sortBy) {
+                               @RequestParam(value = "sortBy", defaultValue = AppConstants.DEFAULT_SORT_BY, required = false) String sortBy,
+                               @RequestParam(value = "pageNo", defaultValue = AppConstants.DEFAULT_PAGE_NUMBER, required = false) int pageNo) {
 
         try {
-            final List<MovieDTO> movies = movieService.getMovies(postedBy, sortBy);
-            model.addAttribute("movies", movies);
+            final MovieResponse movies = movieService.getMovies(postedBy, sortBy, pageNo);
+            model.addAttribute("moviesResponse", movies);
+
+            if (!sortBy.equals(AppConstants.DEFAULT_SORT_BY))
+                model.addAttribute("lastSortBy", sortBy);
+
         } catch (AuthenticationException ex) {
             log.info("Exception caught : {}", ex.getMessage());
         }

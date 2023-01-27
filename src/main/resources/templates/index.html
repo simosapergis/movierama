@@ -34,9 +34,14 @@
             </div>
         </div>
 
+        <div th:if="${moviesResponse.getContent().isEmpty()}">
+            <h1 th:style="'text-align: center; padding-top:40px; width: 85%; color:darkgray;'">
+                No results found.
+            </h1>
+        </div>
 
-        <div style="width:100%; z-index:10;">
-            <tr th:each="movie : ${movies}">
+        <div th:if="${!moviesResponse.getContent().isEmpty()}" style="width:100%; z-index:10;">
+            <tr th:each="movie : ${moviesResponse.getContent()}">
                 <div style="border: 3px solid black; padding: 20px; margin-bottom: 10px; width: 85%;">
                     <h2 th:text="${movie.title}">title</h2>
                     <p> Posted by
@@ -104,6 +109,12 @@
 
                 </div>
             </tr>
+
+            <ul th:style="'display: flex; text-aling: center; list-style-type:none; position: absolute; left: 40%; padding-bottom: 30px'">
+                <li th:each="page : ${#numbers.sequence(1, moviesResponse.getTotalPages())}" >
+                    <a th:text="${page}" th:href="@{'/?' + ${(lastSortBy != null) ? 'sortBy='+lastSortBy+'&' : ''}+'pageNo='+${moviesResponse.getTotalPages() - (moviesResponse.getPageNo() + 1)}}" th:style="${page == (moviesResponse.getPageNo() + 1)} ? 'pointer-events: none; cursor: default; color: gray; margin-left: 10px; ' : 'margin-left: 10px'"></a>
+                </li>
+            </ul>
         </div>
 
     </div>

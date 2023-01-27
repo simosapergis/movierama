@@ -1,5 +1,6 @@
 package com.example.movierama.movie;
 
+import com.example.movierama.constants.AppConstants;
 import com.example.movierama.movie_opinion.MovieOpinion;
 import com.example.movierama.movie_opinion.MovieOpinionRepository;
 import com.example.movierama.user.CustomUserDetails;
@@ -9,6 +10,9 @@ import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
 import org.modelmapper.convention.MatchingStrategies;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
@@ -37,24 +41,38 @@ public class MovieService {
         modelMapper.getConfiguration().setMatchingStrategy(MatchingStrategies.LOOSE);
     }
 
-    public List<MovieDTO> getMovies(User user, String sortBy) throws AuthenticationException {
+    public MovieResponse getMovies(User user, String sortBy, int pageNo) throws AuthenticationException {
         final Sort sort = Sort.by(sortBy).descending();
+        final Pageable pageable = PageRequest.of(pageNo, AppConstants.DEFAULT_PAGE_SIZE, sort);
 
-        List<Movie> movies;
+        Page<Movie> paginateMovies;
 
         if (user == null)
-            movies = movieRepository.findAll(sort);
+            paginateMovies = movieRepository.findAll(pageable);
         else
-            movies = movieRepository.findAllByUserOrderByPublicationDateDesc(user);
+            paginateMovies = movieRepository.findAllByUser(user, pageable);
+
+        final List<Movie> movies = paginateMovies.getContent();
+        List<MovieDTO> contentList;
 
         if (!CustomUserDetails.isUserAuthenticated()) {
             log.info("Returning list for authenticated NON user");
-            return movies.stream()
+            contentList = movies.stream()
                     .map(elem -> modelMapper.map(elem, MovieDTO.class))
-                    .collect(Collectors.toList());
+                    .toList();
+        } else {
+            contentList =  moviesListForAuthenticated(movies);
         }
 
-        return moviesListForAuthenticated(movies);
+        final MovieResponse movieResponse = new MovieResponse();
+        movieResponse.setContent(contentList);
+        movieResponse.setPageNo(paginateMovies.getNumber());
+        movieResponse.setPageSize(paginateMovies.getSize());
+        movieResponse.setTotalElements(paginateMovies.getTotalElements());
+        movieResponse.setTotalPages(paginateMovies.getTotalPages());
+        movieResponse.setLast(paginateMovies.isLast());
+
+        return movieResponse;
     }
 
     public MovieDTO addMovie(MovieDTO movieDTO) {
@@ -110,4 +128,5 @@ public class MovieService {
 
                 }).toList();
     }
+
 }
