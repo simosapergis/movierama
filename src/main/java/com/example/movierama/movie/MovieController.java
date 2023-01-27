@@ -22,14 +22,15 @@ public class MovieController {
     }
 
     @GetMapping
-    public ResponseEntity<List<MovieDTO>> getMovies(
+    public ResponseEntity<MovieResponse> getMovies(
             @RequestParam(value = "postedBy", required = false) User postedBy,
-            @RequestParam(value = "sortBy", defaultValue = AppConstants.DEFAULT_SORT_BY, required = false) String sortBy) {
+            @RequestParam(value = "sortBy", defaultValue = AppConstants.DEFAULT_SORT_BY, required = false) String sortBy,
+            @RequestParam(value = "pageNo", defaultValue = AppConstants.DEFAULT_PAGE_NUMBER, required = false) int pageNo) {
 
         try{
-            final List<MovieDTO> moviesList = movieService.getMovies(postedBy, sortBy);
+            final MovieResponse movieResponse = movieService.getMovies(postedBy, sortBy, pageNo);
 
-            return new ResponseEntity<>(moviesList, HttpStatus.OK);
+            return new ResponseEntity<>(movieResponse, HttpStatus.OK);
         } catch (AuthenticationException ex) {
             return new ResponseEntity<>(null, HttpStatus.UNAUTHORIZED);
         }
