@@ -44,7 +44,7 @@ public class WebSecurityConfig {
                             try {
                                 authz
                                         .anyRequest()
-                                        .authenticated()
+                                        .permitAll()//.authenticated()
                                         .and()
                                         .formLogin()
                                         .usernameParameter("email")
@@ -63,13 +63,11 @@ public class WebSecurityConfig {
                 .and()
                 .csrf()
                 .disable();
-//        http.authorizeHttpRequests((authz) ->{
-//           authz.anyRequest().permitAll();
-//        });
+
         return http.build();
     }
 
-    @Bean
+
     public WebSecurityCustomizer webSecurityCustomizer() {
         return (web) -> web.ignoring().requestMatchers("/webjars/**","/resources/**","/css/**", "/js/**", "/register/**", "registration_success/**", "/process_register/**", "/error/**");
     }
