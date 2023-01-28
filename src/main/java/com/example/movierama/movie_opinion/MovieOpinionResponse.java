@@ -32,7 +32,8 @@ public class MovieOpinionResponse {
             sb.append(selectableHateElementOnly());
             sb.append(likedMovieText());
         } else{
-            sb.append(selectableAllOpinionElements());
+            String element = this.hasZeroOpinions() ? selectableAllOpinionElementsZero() : selectableAllOpinionElements();
+            sb.append(element);
         }
 
 
@@ -47,7 +48,8 @@ public class MovieOpinionResponse {
             sb.append(selectableLikeElementOnly());
             sb.append(hatedMovieText());
         } else{
-            sb.append(selectableAllOpinionElements());
+            String element = this.hasZeroOpinions() ? selectableAllOpinionElementsZero() : selectableAllOpinionElements();
+            sb.append(element);
         }
 
 
@@ -60,9 +62,10 @@ public class MovieOpinionResponse {
                     <div style="display: flex;">
                         <a hx-trigger="click" hx-post="/api/v1/movie-opinions/%s/like"
                            hx-target="closest span"
-                           hx-swap="outerHTML" style="color: #007bff; cursor: pointer;"
-                           >Likes %s |
+                           hx-swap="outerHTML" style="color: #007bff; cursor: pointer; margin-right: 5px;"
+                           >Likes %s
                         </a>
+                        |
                         <a hx-trigger="click" hx-post="/api/v1/movie-opinions/%s/hate"
                            hx-target="closest span"
                            hx-swap="outerHTML" style="margin-left: 5px; color: #007bff; cursor: pointer;"
@@ -72,6 +75,32 @@ public class MovieOpinionResponse {
                 """;
 
         return String.format(opinionsArea, movie.getId(), updatedLikesCount, movie.getId(), updatedHatesCount);
+    }
+
+    private String selectableAllOpinionElementsZero() {
+        final String opinionsArea = """
+                    <p>
+                  
+                    <span style="margin-right: 20px;">
+                        Be the first one to vote for this movie
+                    </span>
+                        
+                    <div style="display: flex;">
+                        <a hx-trigger="click" hx-post="/api/v1/movie-opinions/%s/like"
+                           hx-target="closest span"
+                           hx-swap="outerHTML" style="color: #007bff; cursor: pointer; margin-right: 5px;"
+                           >Like
+                        </a>
+                        |
+                        <a hx-trigger="click" hx-post="/api/v1/movie-opinions/%s/hate"
+                           hx-target="closest span"
+                           hx-swap="outerHTML" style="margin-left: 5px; color: #007bff; cursor: pointer;"
+                           >Hate
+                        </a>
+                    </div>
+                """;
+
+        return String.format(opinionsArea, movie.getId(), movie.getId());
     }
 
     private String selectableLikeElementOnly() {
@@ -142,4 +171,7 @@ public class MovieOpinionResponse {
         return String.format(likedMovieText, movie.getId());
     }
 
+    private boolean hasZeroOpinions() {
+        return (updatedLikesCount == 0) && (updatedHatesCount == 0);
+    }
 }
