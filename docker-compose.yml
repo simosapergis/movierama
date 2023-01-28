@@ -1,29 +1,35 @@
-version: '2'
+version: '3.2'
 
 services:
   app:
-    image: 'springio/gs-spring-boot-docker:latest'
+    image: 'sapergis/movierama:latest'
     build:
       context: .
     container_name: app
     ports:
-      - 8080:8080
+      - "8080:8080"
     expose:
-      - 8080
+      - "8080"
     depends_on:
       - db
+
     environment:
-      - SPRING_DATASOURCE_URL=jdbc:postgresql://db:5432/compose-postgres
-      - SPRING_DATASOURCE_USERNAME=compose-postgres
-      - SPRING_DATASOURCE_PASSWORD=compose-postgres
-      - SPRING_JPA_HIBERNATE_DDL_AUTO=update
-     
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://db:5432/postgres
+      - SPRING_DATASOURCE_USERNAME=postgres
+      - SPRING_DATASOURCE_PASSWORD=password
+      - SPRING_JPA_HIBERNATE_DDL_AUTO=create-drop
+
      
   db:
     image: 'postgres:13.1-alpine'
     ports:
-      - "8081:5432"
+      - "5432:5432"
     container_name: db
+    expose:
+      - "5432"
     environment:
-      - POSTGRES_USER=compose-postgres
-      - POSTGRES_PASSWORD=compose-postgres
+      - POSTGTES_DB=postgres
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=password
+
+
