@@ -7,6 +7,7 @@ import com.example.movierama.movie.MovieRepository;
 import com.example.movierama.user.User;
 import com.example.movierama.user.UserRepository;
 import org.springframework.boot.CommandLineRunner;
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 import java.time.LocalDateTime;
@@ -15,9 +16,12 @@ import java.util.List;
 @Configuration
 public class MovieramaConfig {
 
-
+    @Bean
     CommandLineRunner commandLineRunner(MovieRepository movieRepository, UserRepository userRepository, MovieOpinionRepository movieOpinionRepository) {
         return args -> {
+            if (userRepository.findAll().size() > 0) {
+                return;
+            }
                                                                         //password : user1234
             final User user1 = new User("user1@test.com", "$2a$10$aFZXXmzrebzvdHk0D/Oe8.cgiZrmK0qWvAjhcL8wbLlUZGz8dQ38m", "Frank", "Miller");
             final User user2 = new User("user2@test.com", "$2a$10$aFZXXmzrebzvdHk0D/Oe8.cgiZrmK0qWvAjhcL8wbLlUZGz8dQ38m", "Jason", "Momoa");
