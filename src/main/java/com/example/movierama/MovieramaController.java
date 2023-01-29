@@ -15,6 +15,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.servlet.ModelAndView;
 
 import javax.naming.AuthenticationException;
 
@@ -32,16 +33,25 @@ public class MovieramaController {
     }
 
     @GetMapping("/")
-    public String viewHomePage(Model model,
-                               @RequestParam(value = "postedBy", required = false) User postedBy,
+    public ModelAndView index(
+                              @RequestParam(value = "postedBy", required = false) User postedBy,
+                              @RequestParam(value = "sortBy", defaultValue = AppConstants.DEFAULT_SORT_BY, required = false) String sortBy,
+                              @RequestParam(value = "pageNo", defaultValue = AppConstants.DEFAULT_PAGE_NUMBER, required = false) int pageNo) {
+
+        return new ModelAndView("redirect:/movies"+"?"+ "sortBy=" + sortBy+ ((postedBy != null) ? "&postedBy="+postedBy : "") + "&pageNo="+ (pageNo > 0 ? pageNo : 0));
+    }
+
+    @GetMapping("/movies")
+    public String viewHomePage(Model model, @RequestParam(value = "postedBy", required = false) User postedBy,
                                @RequestParam(value = "sortBy", defaultValue = AppConstants.DEFAULT_SORT_BY, required = false) String sortBy,
                                @RequestParam(value = "pageNo", defaultValue = AppConstants.DEFAULT_PAGE_NUMBER, required = false) int pageNo) {
 
         try {
             final MovieResponse movies = movieService.getMovies(postedBy, sortBy, pageNo);
+
             model.addAttribute("moviesResponse", movies);
 
-            if (!sortBy.equals(AppConstants.DEFAULT_SORT_BY))
+            if (!(AppConstants.DEFAULT_SORT_BY).equals(sortBy))
                 model.addAttribute("lastSortBy", sortBy);
 
         } catch (AuthenticationException ex) {
