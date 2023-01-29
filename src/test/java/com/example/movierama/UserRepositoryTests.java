@@ -51,6 +51,7 @@ public class UserRepositoryTests {
 
         assertThat(existUser.getEmail()).isNotEqualTo("s@test.com");
     }
+
     @Test
     public void testFindUserByEmail() {
         testCreateUser();

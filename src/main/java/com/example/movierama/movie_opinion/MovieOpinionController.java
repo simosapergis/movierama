@@ -19,14 +19,7 @@ public class MovieOpinionController {
         this.movieOpinionService = movieOpinionService;
     }
 
-    @GetMapping
-    ResponseEntity<List<MovieOpinion>> getOpinions() {
-        final List<MovieOpinion> movieOpinions = movieOpinionService.getOpinions();
-
-        return new ResponseEntity<>(movieOpinions, HttpStatus.OK);
-    }
-
-    @RequestMapping(path = "/{movieId}/like", method = RequestMethod.POST, produces = "application/json")
+    @RequestMapping(path = "/{movieId}/like", method = RequestMethod.POST, produces = "text/html")
     String likeMovie(@PathVariable("movieId") Movie movie) {
         return movieOpinionService.submitLike(movie);
     }
