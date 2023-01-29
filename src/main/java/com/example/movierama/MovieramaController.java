@@ -34,17 +34,25 @@ public class MovieramaController {
 
     @GetMapping("/")
     public ModelAndView index(
-                              @RequestParam(value = "postedBy", required = false) User postedBy,
+                              @RequestParam(value = "postedBy", required = false) String postedBy,
                               @RequestParam(value = "sortBy", defaultValue = AppConstants.DEFAULT_SORT_BY, required = false) String sortBy,
-                              @RequestParam(value = "pageNo", defaultValue = AppConstants.DEFAULT_PAGE_NUMBER, required = false) int pageNo) {
+                              @RequestParam(value = "pageNo", defaultValue = AppConstants.DEFAULT_PAGE_NUMBER, required = false) Integer pageNo) {
 
-        return new ModelAndView("redirect:/movies"+"?"+ "sortBy=" + sortBy+ ((postedBy != null) ? "&postedBy="+postedBy : "") + "&pageNo="+ (pageNo > 0 ? pageNo : 0));
+        StringBuilder uri = new StringBuilder("redirect:/movies?sortBy=").append(sortBy);
+
+        if (postedBy != null)
+            uri.append("&postedBy=").append(postedBy);
+
+        if (pageNo != null)
+            uri.append("&pageNo=").append(pageNo > 0 ? pageNo : 1);
+
+        return new ModelAndView(uri.toString());
     }
 
     @GetMapping("/movies")
     public String viewHomePage(Model model, @RequestParam(value = "postedBy", required = false) User postedBy,
                                @RequestParam(value = "sortBy", defaultValue = AppConstants.DEFAULT_SORT_BY, required = false) String sortBy,
-                               @RequestParam(value = "pageNo", defaultValue = AppConstants.DEFAULT_PAGE_NUMBER, required = false) int pageNo) {
+                               @RequestParam(value = "pageNo", defaultValue = AppConstants.DEFAULT_PAGE_NUMBER, required = false) Integer pageNo) {
 
         try {
             final MovieResponse movies = movieService.getMovies(postedBy, sortBy, pageNo);

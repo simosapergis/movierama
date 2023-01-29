@@ -42,8 +42,9 @@ public class MovieService {
     }
 
     public MovieResponse getMovies(User user, String sortBy, int pageNo) throws AuthenticationException {
+        pageNo = (pageNo > 0) ? (pageNo - 1) : pageNo;
         final Sort sort = Sort.by(sortBy).descending();
-        final Pageable pageable = PageRequest.of(pageNo, AppConstants.DEFAULT_PAGE_SIZE, sort);
+        final Pageable pageable = PageRequest.of((pageNo), AppConstants.DEFAULT_PAGE_SIZE, sort);
 
         Page<Movie> paginateMovies;
 

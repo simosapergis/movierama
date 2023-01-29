@@ -24,7 +24,7 @@
         <div style="display: flex;">
             <div class="sort-area" style="width: 85%; background-color: aliceblue; border: 3px solid black; padding: 15px; margin-bottom: 15px;">
                 <div class="flex-container">
-                    <span>Sort by:</span> <a th:href="@{'/?sortBy=likes'}">Likes</a> | <a th:href="@{'/?sortBy=hates'}">Hates</a> | <a th:href="@{'/?sortBy=publicationDate'}">Date</a>
+                    <span>Sort by:</span> <a th:href="@{'/movies?sortBy=likes'}">Likes</a> | <a th:href="@{'/movies?sortBy=hates'}">Hates</a> | <a th:href="@{'/movies?sortBy=publicationDate'}">Date</a>
                 </div>
             </div>
             <div th:if="${isUserAuthenticated}">
@@ -45,7 +45,7 @@
                 <div style="border: 3px solid black; padding: 20px; margin-bottom: 10px; width: 85%;">
                     <h2 th:text="${movie.title}">title</h2>
                     <p> Posted by
-                        <a th:text="${movie.owned ? 'You' : movie.name + ' ' + movie.lastName + ' '}" th:href="@{'/?postedBy='+${movie.getUserId()}}"></a>
+                        <a th:text="${movie.owned ? 'You' : movie.name + ' ' + movie.lastName + ' '}" th:href="@{'/movies?postedBy='+${movie.getUserId()}}"></a>
                         <span th:text="${movie.postedWhen}"></span></p>
                     <p th:text="${movie.description}"></p>
                     <br>
@@ -115,7 +115,7 @@
 
             <ul th:style="'display: flex; text-aling: center; list-style-type:none; position: absolute; left: 40%; padding-bottom: 30px'">
                 <li th:each="page : ${#numbers.sequence(1, moviesResponse.getTotalPages())}" >
-                    <a th:text="${page}" th:href="@{'/?' + ${(lastSortBy != null) ? 'sortBy='+lastSortBy+'&' : ''}+'pageNo='+${moviesResponse.getTotalPages() - (moviesResponse.getPageNo() + 1)}}" th:style="${page == (moviesResponse.getPageNo() + 1)} ? 'pointer-events: none; cursor: default; color: gray; margin-left: 10px; ' : 'margin-left: 10px'"></a>
+                    <a th:text="${page}" th:href="@{'/movies?' + ${(lastSortBy != null) ? 'sortBy='+lastSortBy+'&' : ''}+'pageNo='+${page}}" th:style="${page == (moviesResponse.getPageNo() + 1)} ? 'pointer-events: none; cursor: default; color: gray; margin-left: 10px; ' : 'margin-left: 10px'"></a>
                 </li>
             </ul>
         </div>
