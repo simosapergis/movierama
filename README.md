@@ -25,3 +25,6 @@ https://docs.docker.com/compose/install/
 
 4. Run (for linux)
 `sudo docker-compose -f docker-compose.yml up`
+
+5. When docker is finished and spring is up and running, 
+go to http://localhost:8080/ and test the app.
