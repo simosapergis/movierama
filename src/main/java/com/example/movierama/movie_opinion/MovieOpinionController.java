@@ -19,12 +19,12 @@ public class MovieOpinionController {
         this.movieOpinionService = movieOpinionService;
     }
 
-    @RequestMapping(path = "/{movieId}/like", method = RequestMethod.POST, produces = "text/html")
+    @RequestMapping(path = "/{movieId}/like", method = RequestMethod.PUT, produces = "text/html")
     String likeMovie(@PathVariable("movieId") Movie movie) {
         return movieOpinionService.submitLike(movie);
     }
 
-    @RequestMapping(path = "/{movieId}/hate", method = RequestMethod.POST, produces = "application/json")
+    @RequestMapping(path = "/{movieId}/hate", method = RequestMethod.PUT, produces = "text/html")
     String hateMovie(@PathVariable("movieId") Movie movie) {
         return movieOpinionService.submitHate(movie);
     }

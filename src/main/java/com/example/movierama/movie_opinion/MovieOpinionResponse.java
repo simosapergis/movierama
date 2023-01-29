@@ -60,13 +60,13 @@ public class MovieOpinionResponse {
         final String opinionsArea = """
                     <p>
                     <div style="display: flex;">
-                        <a hx-trigger="click" hx-post="/api/v1/movie-opinions/%s/like"
+                        <a hx-trigger="click" hx-put="/api/v1/movie-opinions/%s/like"
                            hx-target="closest span"
                            hx-swap="outerHTML" style="color: #007bff; cursor: pointer; margin-right: 5px;"
                            >Likes %s
                         </a>
                         |
-                        <a hx-trigger="click" hx-post="/api/v1/movie-opinions/%s/hate"
+                        <a hx-trigger="click" hx-put="/api/v1/movie-opinions/%s/hate"
                            hx-target="closest span"
                            hx-swap="outerHTML" style="margin-left: 5px; color: #007bff; cursor: pointer;"
                            >Hates %s
@@ -86,13 +86,13 @@ public class MovieOpinionResponse {
                     </span>
                         
                     <div style="display: flex;">
-                        <a hx-trigger="click" hx-post="/api/v1/movie-opinions/%s/like"
+                        <a hx-trigger="click" hx-put="/api/v1/movie-opinions/%s/like"
                            hx-target="closest span"
                            hx-swap="outerHTML" style="color: #007bff; cursor: pointer; margin-right: 5px;"
                            >Like
                         </a>
                         |
-                        <a hx-trigger="click" hx-post="/api/v1/movie-opinions/%s/hate"
+                        <a hx-trigger="click" hx-put="/api/v1/movie-opinions/%s/hate"
                            hx-target="closest span"
                            hx-swap="outerHTML" style="margin-left: 5px; color: #007bff; cursor: pointer;"
                            >Hate
@@ -107,7 +107,7 @@ public class MovieOpinionResponse {
         final String opinionsArea = """
                         <p>
                         <div style="display: flex;">
-                            <a hx-trigger="click" hx-post="/api/v1/movie-opinions/%s/like"
+                            <a hx-trigger="click" hx-put="/api/v1/movie-opinions/%s/like"
                                hx-target="closest span"
                                hx-swap="outerHTML" style="color: #007bff; cursor: pointer;"
                                >Likes %s |
@@ -126,7 +126,7 @@ public class MovieOpinionResponse {
                         <div style="display: flex;">
                             <div>Likes %s |
                             </div>
-                            <a hx-trigger="click" hx-post="/api/v1/movie-opinions/%s/hate"
+                            <a hx-trigger="click" hx-put="/api/v1/movie-opinions/%s/hate"
                                hx-target="closest span"
                                hx-swap="outerHTML" style="margin-left: 5px; color: #007bff; cursor: pointer;"
                                > Hates %s
@@ -141,12 +141,12 @@ public class MovieOpinionResponse {
         String likedMovieText = """
             <div style="position: absolute; right: 0;">
                 <div style="display: flex">
-                    <div>You liked this movie | </div>
+                    <div>You like this movie | </div>
                     <a style="margin-left: 5px; color: #007bff; cursor: pointer;"
                         hx-trigger="click"
                         hx-target="closest span"
                         hx-swap="outerHTML"
-                        hx-post="/api/v1/movie-opinions/%s/like">Unlike</a>
+                        hx-put="/api/v1/movie-opinions/%s/like">Unlike</a>
                 </div>
             </div>
          """;
@@ -163,7 +163,7 @@ public class MovieOpinionResponse {
                         hx-trigger="click"
                         hx-target="closest span"
                         hx-swap="outerHTML"
-                        hx-post="/api/v1/movie-opinions/%s/hate">Unhate</a>
+                        hx-put="/api/v1/movie-opinions/%s/hate">Unhate</a>
                 </div>
             </div>
          """;
