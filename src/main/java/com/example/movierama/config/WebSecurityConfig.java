@@ -55,10 +55,14 @@ public class WebSecurityConfig {
                 .authorizeHttpRequests((authz) -> {
                             try {
                                 authz
+                                        .requestMatchers("/", "/movies/**", "/register/**", "registration_success/**", "/process_register/**", "/error/**", "/webjars/**", "/resources/**", "/css/**", "/js/**")
+                                        .permitAll()
                                         .anyRequest()
-                                        .permitAll()//.authenticated()
+                                        .authenticated()
                                         .and()
                                         .formLogin()
+                                        .permitAll()
+                                        .defaultSuccessUrl("/movies")
                                         .usernameParameter("email")
                                         .permitAll()
                                         .and()
@@ -80,6 +84,7 @@ public class WebSecurityConfig {
     }
 
 
+    //@Bean
     public WebSecurityCustomizer webSecurityCustomizer() {
         return (web) -> web.ignoring().requestMatchers("/webjars/**","/resources/**","/css/**", "/js/**", "/register/**", "registration_success/**", "/process_register/**", "/error/**");
     }
