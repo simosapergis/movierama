@@ -51,7 +51,7 @@ public class WebSecurityConfig {
                                         .permitAll()
                                         .and()
                                         .logout()
-                                        .logoutSuccessUrl("/").permitAll();
+                                        .logoutSuccessUrl("/movies").permitAll();
                             } catch (Exception e) {
                                 throw new RuntimeException(e);
                             }

@@ -18,11 +18,21 @@ public class CustomUserDetailsConfig {
                .concat(CustomUserDetails.getAuthenticatedUser().getLastName());
     }
 
+    @Bean(name = "authenticatedUserId")
+    public AuthenticatedUserId getId() {
+        return ()-> CustomUserDetails.getAuthenticatedUser().getId();
+    }
+
+
     private interface Authenticatable {
         boolean isUserAuthenticated();
     }
 
     private interface AuthenticatableUserDetails {
         String getAuthenticatedUserFullName();
+    }
+
+    private interface AuthenticatedUserId {
+        Long getId();
     }
 }

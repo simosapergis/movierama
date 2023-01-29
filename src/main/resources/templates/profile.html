@@ -5,15 +5,16 @@
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
   <meta name="description" content="">
   <meta name="author" content="">
-  <title>Confirm Log Out?</title>
+  <title>Profile</title>
   <link rel="stylesheet" type="text/css" href="/webjars/bootstrap/css/bootstrap.min.css"/>
 </head>
 <body>
 <div class="container">
   <form class="form-signin" method="post" action="/logout" style="width: 300px; position: relative; margin-left: auto; margin-right: auto;">
-    <h2 class="form-signin-heading">Are you sure you want to log out?</h2>
+    <h3 th:text="'Your profile '+${name +' '+ lastName}" class="form-signin-heading" th:style="'padding: 30px 0 30px 0;'">Your profile</h3>
     <button class="btn btn-lg btn-primary btn-block" type="submit">Log Out</button>
-    <a th:href="@{/}" class="btn btn-lg btn-secondary btn-block">Go Back</a>
+    <a th:href="@{'/movies?postedBy='+${userId}}" class="btn btn-lg btn-secondary btn-block">My Movies</a>
+    <a th:href="@{/movies}" class="btn btn-lg btn-secondary btn-block">Go Back</a>
   </form>
 </div>
 </body>

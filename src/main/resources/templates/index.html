@@ -14,7 +14,7 @@
         <div style="display: flex; justify-content: space-between; width: 85%;  align-items: center; margin: 15px 0 15px 0;">
             <h1><a th:href="@{/movies}" th:style="'cursor: default; color:#212529; text-decoration: none;'">MovieRama</a></h1>
             <div th:if="${isUserAuthenticated}">
-                Welcome back <a th:href="@{/logout_page}" th:text="${@authenticated.getAuthenticatedUserFullName()}"></a>
+                Welcome back <a th:href="@{'/profile?userId='+${@authenticatedUserId.getId()}}" th:text="${@authenticated.getAuthenticatedUserFullName()}"></a>
             </div>
             <div th:if="!${isUserAuthenticated}">
                 <a th:href="@{/login}">Log in</a> Or <a th:href="@{/register}" class="btn btn-primary">Sign up</a>

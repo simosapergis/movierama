@@ -99,8 +99,12 @@ public class MovieramaController {
         return "add_movie_success";
     }
 
-    @GetMapping("/logout_page")
-    public String getLogoutPage() {
-        return "logout_page";
+    @GetMapping("/profile")
+    public String getLogoutPage(@RequestParam(value = "userId") User user, Model model) {
+        model.addAttribute("userId", user.getId());
+        model.addAttribute("name", user.getName());
+        model.addAttribute("lastName", user.getLastName());
+
+        return "profile";
     }
 }
